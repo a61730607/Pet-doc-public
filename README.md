@@ -1,13 +1,12 @@
 # Pet-doc-public
 ## 新-Pet文档框架
 
-MM          [https://mmdetection.readthedocs.io/en/latest/](https://mmdetection.readthedocs.io/en/latest/)
+MM          [https://mmdetection.readthedocs.io/en/latest/]
 
-PADLE     [https://www.paddlepaddle.org.cn/documentation/docs/zh/api/index_cn.html](https://www.paddlepaddle.org.cn/documentation/docs/zh/api/index_cn.html)
+PADLE     [https://www.paddlepaddle.org.cn/documentation/docs/zh/api/index_cn.html]
+torch       [https://pytorch.org/vision/stable/index.html]
 
-torch       [https://pytorch.org/vision/stable/index.html](https://pytorch.org/vision/stable/index.html)
-
-detecton2  [https://detectron2.readthedocs.io/en/latest/](https://detectron2.readthedocs.io/en/latest/)
+detecton2  [https://detectron2.readthedocs.io/en/latest/]
 
 ### 使用教程
 
@@ -48,11 +47,11 @@ detecton2  [https://detectron2.readthedocs.io/en/latest/](https://detectron2.rea
     2.1 pet.lib
 
     ​	2.2.1 config 
-      ([https://detectron2.readthedocs.io/en/latest/modules/config.html](https://detectron2.readthedocs.io/en/latest/modules/config.html)）
+      ([https://detectron2.readthedocs.io/en/latest/modules/config.html]）
 
     ​	2.2.2 backbone
 
-    ​	2.2.3 data（[https://detectron2.readthedocs.io/en/latest/modules/data.html](https://detectron2.readthedocs.io/en/latest/modules/data.html)）（马原东）
+    ​	2.2.3 data（[https://detectron2.readthedocs.io/en/latest/modules/data.html])）（马原东）
 
     ​		2.2.3.1 datasets
 
@@ -100,7 +99,7 @@ detecton2  [https://detectron2.readthedocs.io/en/latest/](https://detectron2.rea
 
     ​		2.2.4.2 Global xxx (每个任务的Module，比如GlobalCls）
 
-### 应用实践   （[https://detectron2.readthedocs.io/en/latest/tutorials/models.html#build-models-from-yacs-config](https://detectron2.readthedocs.io/en/latest/tutorials/models.html#build-models-from-yacs-config)）
+### 应用实践   （[https://detectron2.readthedocs.io/en/latest/tutorials/models.html#build-models-from-yacs-config]
 
     3.1 快速开始
 
