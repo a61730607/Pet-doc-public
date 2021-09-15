@@ -35,13 +35,12 @@ detecton2  [https://detectron2.readthedocs.io/en/latest/]
 
     ​	1.5.7 inference （代）
 
-    ​	~~1.5.8 visualizer~~
 
     1.6 ModelZoo
 
     1.7 Benchmark
 
-    ~~1.8 工程部署~~
+    * 1.8 工程部署
 
 ### API文档  (函数调用) 查询类
 
@@ -119,11 +118,11 @@ detecton2  [https://detectron2.readthedocs.io/en/latest/]
 
     ​	3.3.2 添加自定义模型
 
-    ​	~~3.3.3 添加自定义模块~~
+    ​	*3.3.3 添加自定义模块~~
 
-    ​	~~3.3.4 添加自定义任务~~
+    ​	*3.3.4 添加自定义任务~~
 
-    ~~3.4 Pet 模块开发*~~
+    *3.4 Pet 模块开发*
 
     ​	~~3.4.1 提交issue~~
 
