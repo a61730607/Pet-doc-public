@@ -46,12 +46,11 @@ detecton2  [https://detectron2.readthedocs.io/en/latest/]
 
     2.1 pet.lib
 
-    ​	2.2.1 config 
-      ([https://detectron2.readthedocs.io/en/latest/modules/config.html]）
+    ​	2.2.1 config [https://detectron2.readthedocs.io/en/latest/modules/config.html]
 
     ​	2.2.2 backbone
 
-    ​	2.2.3 data（[https://detectron2.readthedocs.io/en/latest/modules/data.html])）（马原东）
+    ​	2.2.3 data [https://detectron2.readthedocs.io/en/latest/modules/data.html]（马原东）
 
     ​		2.2.3.1 datasets
 
