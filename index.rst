@@ -8,13 +8,10 @@ Welcome to Pet documentation!
    get_started.md
    modelzoo_statistics.md
    model_zoo.md
-
-
-
+   
 .. toctree::
-   :caption: API Reference
-
-   api.rst
+   :maxdepth: 2
+   :caption: Quick Run
 
 Indices and tables
 ==================
