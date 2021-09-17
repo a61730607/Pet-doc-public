@@ -12,6 +12,8 @@ Welcome to Pet documentation!
 .. toctree::
    :maxdepth: 2
    :caption: Quick Run
+   
+   1_exist_data_model.md
 
 Indices and tables
 ==================
