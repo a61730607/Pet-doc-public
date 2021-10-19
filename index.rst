@@ -5,15 +5,15 @@ Welcome to Pet documentation!
    :maxdepth: 2
    :caption: Get Started
 
-   get_started.md
-   modelzoo_statistics.md
-   model_zoo.md
+   get_started
+   modelzoo_statistics
+   model_zoo
    
 .. toctree::
    :maxdepth: 2
    :caption: Quick Run
    
-   1_exist_data_model.md
+   1_exist_data_model
 
 Indices and tables
 ==================
