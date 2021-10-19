@@ -2,21 +2,16 @@ Welcome to Pet documentation!
 =======================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Get Started
 
-   get_started
-   modelzoo_statistics
-   model_zoo
+   hello
    
-.. toctree::
-   :maxdepth: 2
-   :caption: Quick Run
-   
-   1_exist_data_model
+#.. toctree::
+#   :maxdepth: 1
+#   :caption: Quick Run
+#   
+#   1_exist_data_model
 
 Indices and tables
 ==================
-
-* :ref:`genindex`
-* :ref:`search`
