@@ -3,9 +3,7 @@
 
 通过阅读本教程，您可以了解使用Pet在CIFAR10数据集上训练和测试一个分类器的简要步骤。如果想要了解更多内容，请点击以下链接：
 
-* 在ImageNet数据集上训练分类模型的详细案例见[ImageNet分类教程](https://github.com/BUPT-PRIV/Pet-DOC/blob/master/教程/初级教程/在ImageNet数据集上训练分类模型/在ImageNet数据集上训练分类模型.md)。
-* Pet各组件的细节介绍见[Documents](https://github.com/BUPT-PRIV/Pet-DOC/tree/master/%E6%9E%B6%E6%9E%84/component-collects)。
-* 详细的训练和测试代码见[$Pet/tools/cls/train_net.py](https://github.com/BUPT-PRIV/Pet/blob/master/tools/cls/train_net.py)与[$Pet/tools/cls/test_net.py](https://github.com/BUPT-PRIV/Pet/blob/master/tools/cls/test_net.py)。
+* 在ImageNet数据集上训练分类模型的详细案例见[ImageNet分类教程](../tutorials/basic/cls_zh.md)。
 
 下面介绍CIFAR分类训练和测试的流程：
 
@@ -13,7 +11,7 @@
 
 * 下载：训练前，先将[python版本的CIFAR数据](https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz)下载到本地并完成解压，CIFAR数据内容和类别如下：
 
-<div align=center><img src="https://github.com/BUPT-PRIV/Pet-DOC/blob/master/cifar10_pic.png"/></div>
+![image](../image_source/cifar10_pic.png)
 
 * 路径：将数据已经直接或以软连接的形式存放在`$Pet/data`文件路径下，文件结构如下：
 
@@ -36,22 +34,20 @@ ln -s $CIFAR $Pet/data
 ```
 
 
-* 注册：Pet在[$Pet/pet/cls/datasets/dataset_catalog.py](https://github.com/BUPT-PRIV/Pet/blob/master/pet/cls/datasets/dataset_catalog.py#L35)中已经完成了对CIFAR数据路径的定义，读者可以参见[数据制备](https://github.com/BUPT-PRIV/Pet-DOC/blob/master/架构/component-collects/数据制备/数据制备.md#数据集注册)了解数据的注册过程。
-
 ## 预训练模型
 
 如需迁移其他网络的训练参数来进行当前任务的训练，请将要进行迁移的网络模型放到`$Pet/weights`路径下。作为基本的分类任务，Pet在训练CIFAR数据时，选择了直接随机初始化。
 
 ## 分类训练和测试
 
-使用Pet训练和测试CIFAR10分类模型时，需要指定一个YAML文件，该文件里包含了所有训练和测试时使用到的可以调节的超参数，这里以[$Pet/cfgs/cls/cifar/resnext29-8x64d_cifar10.yaml](https://github.com/BUPT-PRIV/Pet/blob/master/cfgs/cls/cifar/resnext29-8x64d_cifar10.yaml)为例进行介绍。
+使用Pet训练和测试CIFAR10分类模型时，需要指定一个YAML文件，该文件里包含了所有训练和测试时使用到的可以调节的超参数，这里以[$Pet/cfgs/cls/cifar/resnext29-8x64d_cifar10.yaml](https://github.com/BUPT-PRIV/Pet-dev/blob/main/cfgs/vision/Cifar/resnext29-8x64d_cifar10.yaml)为例进行介绍。
 
 训练用法示例：
 
 ```
 cd $Pet
 
-CUDA_VISIBLE_DEVICES=0,1,2,3 python -m torch.distributed.launch --nproc_per_node=4 tools/cls/train_net.py --cfg cfgs/cls/cifar/resnext29-8x64d_cifar10.yaml
+python tools/train_net_all.py --cfg=cfgs/vision/Cifar/resnext29-8x64d_cifar10.yaml
 ```
 
 在训练正常运行时，会在控制台输出如下的日志信息。
@@ -79,7 +75,7 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 python -m torch.distributed.launch --nproc_per_node
 ```
 cd $Pet
 
-CUDA_VISIBLE_DEVICES=0,1,2,3 python tools/cls/test_net.py --cfg cfgs/cls/cifar/resnext29-8x64d_cifar10.yaml
+python tools/test_net_all.py--cfg cfgs/vision/Cifar/resnext29-8x64d_cifar10.yaml
 ```
 
 测试结果：
