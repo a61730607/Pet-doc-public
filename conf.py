@@ -13,7 +13,7 @@
 import os
 import subprocess
 import sys
-
+import pytorch_sphinx_theme
 sys.path.insert(0, os.path.abspath('..'))
 
 # -- Project information -----------------------------------------------------
@@ -75,7 +75,37 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # a list of builtin themes.
 #
 html_theme = 'sphinx_rtd_theme'
+html_theme_path = [pytorch_sphinx_theme.get_html_theme_path()]
 
+html_theme_options = {
+    'menu': [
+        {
+            'name': 'GitHub',
+            'url': 'https://github.com/BUPT-PRIV/Pet-dev'
+        },
+        {
+            'name':
+            'Projects',
+            'children': [
+
+                {
+                    'name': 'MMTracking',
+                    'url': 'https://github.com/open-mmlab/mmtracking',
+                },
+            ]
+        },
+        {
+            'name':
+            'OpenMMLab',
+            'children': [
+                {
+                    'name': 'Zhihu',
+                    'url': 'https://zhihu.com/people/openmmlab'
+                },
+            ]
+        },
+    ]
+}
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
