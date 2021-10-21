@@ -11,7 +11,7 @@
 
 如果您具有丰富的目标检测算法的研究经验，您也可以直接在Pet中运行`$Pet/tools/train_net_all.py` 或 `$Pet/tools/test_net_all.py` 脚本立即开始训练或测试您的Faster R-CNN模型。
 
-### 三、用法示例：
+### 三、用法示例
 
 * **训练**
 
