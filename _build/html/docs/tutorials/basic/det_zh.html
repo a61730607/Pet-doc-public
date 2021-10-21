@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>在MSCOCO2017数据集上训练Faster R-CNN模型 &mdash; Pet-doc 0.7.0 文档</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/translations.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜索" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> Pet-doc
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">开始你的第一步</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview/about_pet_zh.html">关于Pet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview/why_pet_zh.html">为什么选择Pet？</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview/install_zh.html">Pet安装</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview/quick_start.html">快速开始</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">使用教程</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage/configs_zh.html">配置系统</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage/hook_zh.html">Hook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage/data_zh.html">数据加载教程</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage/solver_zh.html">迭代优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage/model_building_zh.html">模型构建</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage/training_zh.html">训练教程</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage/evaluation_zh.html">评估教程</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">应用实践</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/basic/cls_zh.html">在ImageNet数据集上训练分类模型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/basic/semseg_zh.html">在ADE20K数据集上训练resnet50+PSP模型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/basic/det_zh.html">在MSCOCO2017数据集上训练Faster R-CNN模型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/basic/parsing_zh.html">Parsing教程/Parsing R-CNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/customer/new_backbone_zh.html">添加新的模块</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/customer/new_dataset_zh.html">添加自定义数据集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/core/pr_zh.html">扩展</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/core/issue_zh.html">Pet问题反馈</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">语言切换</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../switch_language.html"><a href='https://mmdetection.readthedocs.io/en/latest/'>English</a></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../switch_language.html#a-href-https-mmdetection-readthedocs-io-zh-cn-latest-a"><a href='https://mmdetection.readthedocs.io/zh_CN/latest/'>简体中文</a></a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">接口文档（英文）</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Pet-doc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>在MSCOCO2017数据集上训练Faster R-CNN模型</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/docs/tutorials/basic/det_zh.md.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="mscoco2017faster-r-cnn">
+<h1>在MSCOCO2017数据集上训练Faster R-CNN模型<a class="headerlink" href="#mscoco2017faster-r-cnn" title="永久链接至标题"></a></h1>
+<section id="id1">
+<h2>一、介绍<a class="headerlink" href="#id1" title="永久链接至标题"></a></h2>
+<p>本教程将介绍使用Pet训练以及测试Faster R-CNN模型进行目标检测的主要步骤，在此我们会指导您如何通过组合Pet的提供组件来训练Faster R-CNN模型，在此我们仅讲解组件的调用，部分实现细节请查阅系统组件的相应部分。</p>
+<p>在阅读本教程的之前我们强烈建议您阅读原始论文<a class="reference external" href="https://arxiv.org/abs/1506.01497">Faster R-CNN[1]</a>以了解更多关于Faster R-CNN的算法原理。MSCOCO2017数据集可通过<a class="reference external" href="https://cocodataset.org/#download">官方链接</a>下载。</p>
+</section>
+<section id="id2">
+<h2>二、快速开始<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<p>如果您具有丰富的目标检测算法的研究经验，您也可以直接在Pet中运行<code class="docutils literal notranslate"><span class="pre">$Pet/tools/train_net_all.py</span></code> 或 <code class="docutils literal notranslate"><span class="pre">$Pet/tools/test_net_all.py</span></code> 脚本立即开始训练或测试您的Faster R-CNN模型。</p>
+</section>
+<section id="id3">
+<h2>三、用法示例：<a class="headerlink" href="#id3" title="永久链接至标题"></a></h2>
+<ul class="simple">
+<li><p><strong>训练</strong></p></li>
+</ul>
+<p>使用8块GPU在MSCOCO2017上训练一个端到端的Faster R-CNN模型：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>cd $Pet
+python tools/train_net_all.py --cfg cfgs/vision/COCO/e2e_faster-impr_rcnn_R-50-C4_1x_ms.yaml
+</pre></div>
+</div>
+<p>指定特定的GPU在MSCOCO上训练一个端到端的Faster R-CNN模型：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>cd $Pet
+python tools/train_net_all.py --cfg cfgs/vision/COCO/e2e_faster-impr_rcnn_R-50-C4_1x_ms.yaml --gpu_id 0,1,2,3
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>测试</strong></p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>cd $Pet
+python tools/test_net_all.py --cfg ckpts/vision/COCO/e2e_faster-impr_rcnn_R-50-C4_1x_ms.yaml
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>cd $Pet
+python tools/test_net_all.py --cfg ckpts/vision/COCO/e2e_faster-impr_rcnn_R-50-C4_1x_ms.yaml --gpu_id 0,1
+</pre></div>
+</div>
+</section>
+<section id="id4">
+<h2>四、构建实验配置文件<a class="headerlink" href="#id4" title="永久链接至标题"></a></h2>
+<p>在进行任何与模型训练和测试有关的操作之前，需要先指定一个YAML文件，明确在训练时对数据集、模型结构、优化策略以及其他重要参数的需求与设置，本教程以 <code class="docutils literal notranslate"><span class="pre">$Pet/cfgs/vision/COCO/e2e_faster-impr_rcnn_R-50-C4_1x_ms.yaml</span></code> 为例，讲解训练过程中所需要的关键配置，该套配置将指导此Faster R-CNN模型训练以及测试的全部步骤和细节，全部参数设置请见$Pet/cfgs/vision/COCO/e2e_faster-impr_rcnn_R-50-C4_1x_ms.yaml。</p>
+<p>Pet以yaml文件格式定义并存储本次实验配置信息，并根据任务类型和所用数据集等信息将其保存在cfgs目录下的相应位置。以 <code class="docutils literal notranslate"><span class="pre">$Pet/cfgs/vision/COCO/e2e_faster-impr_rcnn_R-50-C4_1x_ms.yaml</span></code> 为例，其包含的大致配置信息如下(所有默认基础配置可在 <code class="docutils literal notranslate"><span class="pre">$Pet/pet/lib/config/</span></code> 目录下查询)：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">MISC</span><span class="p">:</span> <span class="c1"># 基础配置</span>
+  <span class="o">...</span>
+<span class="n">MODEL</span><span class="p">:</span> <span class="c1"># 模型配置</span>
+  <span class="o">...</span>
+<span class="n">SOLVER</span><span class="p">:</span> <span class="c1"># 优化器及调度器配置</span>
+  <span class="o">...</span>
+<span class="n">DATA</span><span class="p">:</span> <span class="c1"># 数据相关配置</span>
+  <span class="o">...</span>
+<span class="n">TRAIN</span><span class="p">:</span> <span class="c1"># 训练配置</span>
+  <span class="o">...</span>
+<span class="n">TEST</span><span class="p">:</span> <span class="c1"># 测试配置</span>
+  <span class="o">...</span>
+</pre></div>
+</div>
+</section>
+<section id="id5">
+<h2>五、数据集准备和介绍<a class="headerlink" href="#id5" title="永久链接至标题"></a></h2>
+<p>微软发布的MSCOCO数据库是一个大型图像数据集，专为对象检测、分割、人体关键点检测、语义分割和字幕生成而设计。</p>
+<p><img alt="image" src="https://cocodataset.org/images/detection-splash.png" /></p>
+<p>MSCOCO数据库的网址是:</p>
+<ul class="simple">
+<li><p>MSCOCO数据集主页：<a class="reference external" href="https://cocodataset.org/">https://cocodataset.org/</a></p></li>
+<li><p>Github网址：<a class="reference external" href="https://github.com/cocodataset/">https://github.com/cocodataset/</a></p></li>
+</ul>
+<p><a class="reference external" href="https://github.com/cocodataset/cocoapi/">cocoapi</a>提供了Matlab，Python和Lua的调用接口。该API可以提供完整的图像标签数据的加载、分析和可视化。此外，网站还提供了数据相关的文章和教程。</p>
+<p>在使用MSCOCO数据库提供的API和demo之前, 需要首先下载MSCOCO的图像和标签数据（类别标志、类别数量区分、像素级的分割等），Pet需要从MSCOCO中下载以下内容：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">文件名</th>
+<th align="center">大小</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><a href="http://images.cocodataset.org/zips/train2017.zip">train2017.zip</a></td>
+<td align="center">18GB</td>
+</tr>
+<tr>
+<td align="center"><a href="http://images.cocodataset.org/zips/val2017.zip">val2017.zip</a></td>
+<td align="center">1GB</td>
+</tr>
+<tr>
+<td align="center"><a href="http://images.cocodataset.org/annotations/annotations_trainval2017.zip">annotations_trainval2017.zip</a></td>
+<td align="center">241MB</td>
+</tr>
+</tbody>
+</table><ul class="simple">
+<li><p>图像数据下载到<code class="docutils literal notranslate"><span class="pre">$Pet/data/COCO/</span></code>文件夹中</p></li>
+<li><p>标签数据下载到<code class="docutils literal notranslate"><span class="pre">$Pet/data/COCO/annotations/</span></code>文件夹中</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>COCO
+├── annotations
+├── train2017
+└── val2017
+</pre></div>
+</div>
+</section>
+<section id="id6">
+<h2>六、数据加载<a class="headerlink" href="#id6" title="永久链接至标题"></a></h2>
+<p>yaml配置文件的数据集部分信息(更多默认配置参考<code class="docutils literal notranslate"><span class="pre">$Pet/pet/lib/config/data.py</span></code>)：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">## $Pet/cfgs/vision/COCO/e2e_faster-impr_rcnn_R-50-C4_1x_ms.yaml</span>
+<span class="n">DATA</span><span class="p">:</span>
+  <span class="c1"># yaml配置</span>
+  <span class="n">PIXEL_MEAN</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.485</span><span class="p">,</span> <span class="mf">0.456</span><span class="p">,</span> <span class="mf">0.406</span><span class="p">)</span>
+  <span class="n">PIXEL_STD</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.00392</span><span class="p">,</span> <span class="mf">0.00392</span><span class="p">,</span> <span class="mf">0.00392</span><span class="p">)</span>
+  <span class="c1"># 默认配置，在pet/lib/config/data.py中</span>
+  <span class="n">DATASET_TYPE</span> <span class="o">=</span> <span class="s2">&quot;coco_dataset&quot;</span>
+<span class="o">...</span>
+<span class="n">TRAIN</span><span class="p">:</span>
+  <span class="o">...</span>
+  <span class="n">DATASETS</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;coco_2017_train&quot;</span><span class="p">,)</span>
+  <span class="n">SIZE_DIVISIBILITY</span><span class="p">:</span> <span class="mi">0</span>
+  <span class="n">RESIZE</span><span class="p">:</span>
+    <span class="n">SCALES</span><span class="p">:</span> <span class="p">(</span><span class="mi">640</span><span class="p">,</span> <span class="mi">672</span><span class="p">,</span> <span class="mi">704</span><span class="p">,</span> <span class="mi">736</span><span class="p">,</span> <span class="mi">768</span><span class="p">,</span> <span class="mi">800</span><span class="p">)</span>
+    <span class="n">MAX_SIZE</span><span class="p">:</span> <span class="mi">1333</span>
+<span class="n">TEST</span><span class="p">:</span>
+  <span class="n">DATASETS</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;coco_2017_val&quot;</span><span class="p">,)</span>
+  <span class="n">RESIZE</span><span class="p">:</span>
+    <span class="n">SCALE</span><span class="p">:</span> <span class="mi">800</span>
+    <span class="n">MAX_SIZE</span><span class="p">:</span> <span class="mi">1333</span>
+</pre></div>
+</div>
+<p>根据配置文件构建训练数据集和加载器,核心调用<code class="docutils literal notranslate"><span class="pre">$Pet/pet/vision/datasets/dataset.py</span></code>下的<code class="docutils literal notranslate"><span class="pre">build_dataset</span></code>和<code class="docutils literal notranslate"><span class="pre">make_{train/test}_data_loader</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">## $Pet/tools/vision/train_net.py</span>
+<span class="kn">from</span> <span class="nn">pet.vision.datasets.dataset</span> <span class="kn">import</span> <span class="n">build_dataset</span><span class="p">,</span> <span class="n">make_train_data_loader</span>
+<span class="kn">from</span> <span class="nn">pet.vision.datasets.dataset</span> <span class="kn">import</span> <span class="n">build_dataset</span><span class="p">,</span> <span class="n">make_test_data_loader</span>
+
+<span class="c1"># 构建训练数据集和加载器</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">build_dataset</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">is_train</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">start_iter</span> <span class="o">=</span> <span class="n">checkpointer</span><span class="o">.</span><span class="n">checkpoint</span><span class="p">[</span><span class="s1">&#39;scheduler&#39;</span><span class="p">][</span><span class="s1">&#39;iteration&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">checkpointer</span><span class="o">.</span><span class="n">resume</span> <span class="k">else</span> <span class="mi">1</span>
+<span class="n">train_loader</span> <span class="o">=</span> <span class="n">make_train_data_loader</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">start_iter</span><span class="o">=</span><span class="n">start_iter</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">## $Pet/tools/vision/train_net.py</span>
+
+<span class="c1"># 构建测试数据集和加载器</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">build_dataset</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">is_train</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">test_loader</span> <span class="o">=</span> <span class="n">make_test_data_loader</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">dataset</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>构建数据集的核心是通过解析配置文件相关参数，构建<code class="docutils literal notranslate"><span class="pre">cfg.DATA.DATASET_TYPE</span></code>对应的数据集类(相关代码在<code class="docutils literal notranslate"><span class="pre">$Pet/pet/lib/data/datasets/</span></code>)，构建数据集的核心代码如下：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">## $Pet/pet/vision/datasets/dataset.py</span>
+<span class="kn">from</span> <span class="nn">pet.lib.data.datasets</span> <span class="kn">import</span> <span class="p">(</span><span class="n">CifarDataset</span><span class="p">,</span> <span class="n">COCODataset</span><span class="p">,</span>
+                                   <span class="n">COCOInstanceDataset</span><span class="p">,</span> <span class="n">ConcatDataset</span><span class="p">,</span>
+                                   <span class="n">ImageFolderDataset</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">build_dataset</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">is_train</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">dataset_list</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">TRAIN</span><span class="o">.</span><span class="n">DATASETS</span> <span class="k">if</span> <span class="n">is_train</span> <span class="k">else</span> <span class="n">cfg</span><span class="o">.</span><span class="n">TEST</span><span class="o">.</span><span class="n">DATASETS</span> <span class="c1"># 要读取的数据集list，如：(&quot;coco_2017_train&quot;,)/(&quot;coco_2017_val&quot;,)</span>
+
+    <span class="n">ann_types</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">cfg</span><span class="o">.</span><span class="n">MODEL</span><span class="o">.</span><span class="n">HAS_BOX</span><span class="p">:</span> <span class="c1"># infer_cfg():cfg.MODEL.GLOBAL_HEAD.DET.RPN_ON = True -&gt; cfg.MODEL.HAS_BOX = True</span>
+        <span class="n">ann_types</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;bbox&#39;</span><span class="p">)</span> <span class="c1"># 要加载的标注类型</span>
+    <span class="o">...</span>
+
+    <span class="c1"># 根据cfg.DATA.DATASET_TYPE映射到对应的数据集类：&quot;coco_dataset&quot; -&gt; COCODataset</span>
+    <span class="n">dataset_obj</span> <span class="o">=</span> <span class="n">DATASET_TYPES</span><span class="p">[</span><span class="n">cfg</span><span class="o">.</span><span class="n">DATA</span><span class="o">.</span><span class="n">DATASET_TYPE</span><span class="p">]</span>
+    <span class="n">transforms</span> <span class="o">=</span> <span class="n">build_transforms</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">is_train</span><span class="p">)</span> <span class="c1"># 根据配置信息，对数据做预处理变换</span>
+    <span class="n">transforms</span><span class="o">.</span><span class="n">check_ann_types</span><span class="p">(</span><span class="n">ann_types</span><span class="p">)</span>
+
+    <span class="o">...</span>
+
+    <span class="n">datasets</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># 保存所有读取下载的数据集，有可能是多个数据集，用list存储</span>
+
+    <span class="c1"># 为便于阅读，省去部分异常判断，如：未定义的数据集名称、图像目录或标注文件不存在、指定标注类型数据集不支持等</span>
+    <span class="k">for</span> <span class="n">dataset_name</span> <span class="ow">in</span> <span class="n">dataset_list</span><span class="p">:</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="n">get_im_dir</span><span class="p">(</span><span class="n">dataset_name</span><span class="p">)</span> <span class="c1"># 获取数据集图片目录路径</span>
+        <span class="n">ann_file</span> <span class="o">=</span> <span class="n">get_ann_fn</span><span class="p">(</span><span class="n">dataset_name</span><span class="p">)</span> <span class="c1"># 获取标注文件路径</span>
+        <span class="o">...</span>
+
+        <span class="c1"># 根据上述对配置参数的解析，创建具体的数据集类对象</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset_obj</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">ann_file</span><span class="p">,</span> <span class="n">ann_types</span><span class="p">,</span> <span class="n">ann_fields</span><span class="p">,</span> 
+                              <span class="n">transforms</span><span class="o">=</span><span class="n">transforms</span><span class="p">,</span>
+                              <span class="n">is_train</span><span class="o">=</span><span class="n">is_train</span><span class="p">,</span>
+                              <span class="n">filter_invalid_ann</span><span class="o">=</span><span class="n">is_train</span><span class="p">,</span>
+                              <span class="n">filter_empty_ann</span><span class="o">=</span><span class="n">is_train</span><span class="p">,</span>
+                              <span class="n">filter_crowd_ann</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>    <span class="c1"># TO Check, TODO: filter ignore</span>
+                              <span class="n">bbox_file</span><span class="o">=</span><span class="n">bbox_file</span><span class="p">,</span>
+                              <span class="n">image_thresh</span><span class="o">=</span><span class="n">image_thresh</span><span class="p">,</span>
+                              <span class="n">mosaic_prob</span><span class="o">=</span><span class="n">mosaic_prob</span><span class="p">)</span>
+        <span class="n">datasets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span> <span class="c1"># 加入该数据集类对象到数据集列表</span>
+
+        <span class="n">logging_rank</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Creating dataset: </span><span class="si">{</span><span class="n">dataset_name</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># concatenate all datasets into a single one</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">datasets</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span> <span class="c1"># 如果要下载的数据集大于1，将对多个数据集进行拼接</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">ConcatDataset</span><span class="p">(</span><span class="n">datasets</span><span class="p">)</span>
+        <span class="n">logging_rank</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Concatenate datasets: </span><span class="si">{</span><span class="n">dataset_list</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">datasets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># 返回创建处理后的数据集类对象</span>
+    <span class="k">return</span> <span class="n">dataset</span>
+</pre></div>
+</div>
+<p>构建数据加载器的核心调用是torch.utils.data.DataLoader,根据配置参数解析，确定 DataLoader 的各参数，包括batch_size,sampler,collect_fn等，sampler和collate_fn的自定义实现分别在 <code class="docutils literal notranslate"><span class="pre">$Pet/pet/lib/data/samplers</span></code> 和 <code class="docutils literal notranslate"><span class="pre">$Pet/pet/lib/data/collate_batch.py</span></code>。数据集加载分训练和测试两种情况，大致逻辑相似，为便于阅读，此处仅以测试集加载函数作为示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">## $Pet/pet/vision/datasets/dataset.py </span>
+<span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">BatchSampler</span><span class="p">,</span> <span class="n">DataLoader</span><span class="p">,</span> <span class="n">DistributedSampler</span>
+<span class="kn">from</span> <span class="nn">pet.lib.data.collate_batch</span> <span class="kn">import</span> <span class="n">BatchCollator</span>
+<span class="kn">from</span> <span class="nn">pet.lib.data.samplers</span> <span class="kn">import</span> <span class="p">(</span><span class="n">GroupedBatchSampler</span><span class="p">,</span>
+                                   <span class="n">IterationBasedBatchSampler</span><span class="p">,</span>
+                                   <span class="n">RepeatFactorTrainingSampler</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">make_test_data_loader</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">datasets</span><span class="p">):</span>
+    <span class="n">ims_per_gpu</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">TEST</span><span class="o">.</span><span class="n">IMS_PER_GPU</span>
+    <span class="n">test_sampler</span> <span class="o">=</span> <span class="n">DistributedSampler</span><span class="p">(</span><span class="n">datasets</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">num_workers</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">DATA</span><span class="o">.</span><span class="n">LOADER_THREADS</span>
+    <span class="n">collator</span> <span class="o">=</span> <span class="n">BatchCollator</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">data_loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span>
+        <span class="n">datasets</span><span class="p">,</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="n">ims_per_gpu</span><span class="p">,</span>
+        <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">sampler</span><span class="o">=</span><span class="n">test_sampler</span><span class="p">,</span>
+        <span class="n">num_workers</span><span class="o">=</span><span class="n">num_workers</span><span class="p">,</span>
+        <span class="n">collate_fn</span><span class="o">=</span><span class="n">collator</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">data_loader</span>
+</pre></div>
+</div>
+</section>
+<section id="id7">
+<h2>七、模型构建<a class="headerlink" href="#id7" title="永久链接至标题"></a></h2>
+<p>配置文件的模型搭建部分信息(更多默认配置在<code class="docutils literal notranslate"><span class="pre">$Pet/pet/lib/config/model</span></code>)：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">## $Pet/cfgs/vision/COCO/e2e_faster-impr_rcnn_R-50-C4_1x_ms.yaml</span>
+<span class="n">MODEL</span><span class="p">:</span> <span class="c1"># 模型配置</span>
+  <span class="n">BACKBONE</span><span class="p">:</span> <span class="s2">&quot;resnet_c4&quot;</span> <span class="c1"># 骨干网络配置，根据值&quot;resnet_c4&quot;还需找到相应骨干网络类&quot;RESNET&quot;,对照其参数信息进行配置补充</span>
+  <span class="n">NECK</span><span class="p">:</span> <span class="s2">&quot;&quot;</span> <span class="c1"># 颈部，可选部分，本模型无颈部结构设计</span>
+  <span class="n">GLOBAL_HEAD</span><span class="p">:</span> <span class="c1"># GLOBAL_HEAD结构与任务高度相关，还需进一步在任务分装下指定结构，本实验是检测，对应 DET</span>
+    <span class="n">DET</span><span class="p">:</span>
+      <span class="n">RPN_ON</span><span class="p">:</span> <span class="kc">True</span> <span class="c1"># Faster-RCNN是两阶段检测器，需要通过RPN生成候选框,因此值为True，并对RPN配置进行补充</span>
+  <span class="n">ROI_HEAD</span><span class="p">:</span> <span class="c1"># ROI_HEAD的结构设计</span>
+    <span class="n">FASTER_ON</span><span class="p">:</span> <span class="kc">True</span> 
+  <span class="n">RESNET</span><span class="p">:</span> <span class="c1"># 骨干网络RESNET的构建参数</span>
+    <span class="n">LAYERS</span><span class="p">:</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> 
+  <span class="n">RPN</span><span class="p">:</span> <span class="c1"># GLOBAL_HEAD的RPNMoudle构建的参数</span>
+    <span class="n">PRE_NMS_TOP_N_TEST</span><span class="p">:</span> <span class="mi">6000</span>
+    <span class="n">POST_NMS_TOP_N_TEST</span><span class="p">:</span> <span class="mi">1000</span>
+    <span class="n">SMOOTH_L1_BETA</span><span class="p">:</span> <span class="mf">0.0</span>  <span class="c1"># use L1Loss</span>
+  <span class="n">FASTER</span><span class="p">:</span> <span class="c1"># ROI_HEAD的FASTER构建的参数</span>
+    <span class="n">NUM_CLASSES</span><span class="p">:</span> <span class="mi">80</span>
+    <span class="n">ROI_XFORM_METHOD</span><span class="p">:</span> <span class="s2">&quot;ROIAlignV2&quot;</span>
+    <span class="n">BOX_HEAD</span><span class="p">:</span> <span class="s2">&quot;resnet_c5_head&quot;</span>
+    <span class="n">ROI_XFORM_RESOLUTION</span><span class="p">:</span> <span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">14</span><span class="p">)</span>
+    <span class="n">ROI_XFORM_SAMPLING_RATIO</span><span class="p">:</span> <span class="mi">0</span>  <span class="c1"># SR0</span>
+    <span class="n">SMOOTH_L1_BETA</span><span class="p">:</span> <span class="mf">0.0</span>  <span class="c1"># use L1Loss</span>
+</pre></div>
+</div>
+<p>根据yaml配置文件，通过GeneralizedCNN类实例化对应模型，在forward函数中按顺序控制数据传输。具体代码在<code class="docutils literal notranslate"><span class="pre">$Pet/pet/vision/modeling/model_builder.py</span></code>中：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">## $Pet/pet/vision//modeling/model_builder.py</span>
+<span class="kn">from</span> <span class="nn">pet.vision.modeling.model_builder</span> <span class="kn">import</span> <span class="n">GeneralizedCNN</span>
+
+<span class="k">class</span> <span class="nc">GeneralizedCNN</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    
+        <span class="sd">&quot;&quot;&quot; 视觉模型构建+前向函数定义    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="n">CfgNode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">GeneralizedCNN</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span> <span class="o">=</span> <span class="n">cfg</span>
+        <span class="c1"># 构建faster-rcnn的backbone部分：ResNet</span>
+        <span class="n">Backbone</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">BACKBONES</span><span class="p">[</span><span class="n">cfg</span><span class="o">.</span><span class="n">MODEL</span><span class="o">.</span><span class="n">BACKBONE</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">backbone</span> <span class="o">=</span> <span class="n">Backbone</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span> 
+        <span class="o">...</span>
+        <span class="c1"># Neck为&quot;&quot;，无需构建此部分</span>
+        <span class="k">if</span> <span class="n">cfg</span><span class="o">.</span><span class="n">MODEL</span><span class="o">.</span><span class="n">NECK</span><span class="p">:</span> 
+            <span class="n">Neck</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">NECKS</span><span class="p">[</span><span class="n">cfg</span><span class="o">.</span><span class="n">MODEL</span><span class="o">.</span><span class="n">NECK</span><span class="p">]</span>
+            <span class="o">...</span>
+        <span class="o">...</span>
+        <span class="c1"># 构建faster-rcnn的检测头：RPNModule</span>
+        <span class="k">if</span> <span class="n">cfg</span><span class="o">.</span><span class="n">MODEL</span><span class="o">.</span><span class="n">GLOBAL_HEAD</span><span class="o">.</span><span class="n">DET_ON</span><span class="p">:</span><span class="c1"># cfg.infer_cfg()调用，若cfg.MODEL.GLOBAL_HEAD.DET.RPN_ON = True，则cfg.MODEL.GLOBAL_HEAD.DET_ON = True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">global_det</span> <span class="o">=</span> <span class="n">GlobalDet</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">dim_in</span><span class="p">,</span> <span class="n">spatial_in</span><span class="p">)</span>
+        <span class="c1"># 在GlobalDet类中进一步创建 RPNModule</span>
+        <span class="c1"># class GlobalDet(nn.Module):</span>
+        <span class="c1">#     def __init__(self, cfg, dim_in, spatial_in):</span>
+        <span class="c1">#         ...</span>
+        <span class="c1">#         if self.cfg.MODEL.GLOBAL_HEAD.DET.RPN_ON:</span>
+        <span class="c1">#             self.rpn = RPNModule(self.cfg, dim_in, spatial_in)</span>
+
+        <span class="c1"># 构建faster-rcnn的roi_head</span>
+        <span class="k">if</span> <span class="n">cfg</span><span class="o">.</span><span class="n">MODEL</span><span class="o">.</span><span class="n">ROI_HEAD</span><span class="o">.</span><span class="n">FASTER_ON</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">cfg</span><span class="o">.</span><span class="n">MODEL</span><span class="o">.</span><span class="n">ROI_HEAD</span><span class="o">.</span><span class="n">CASCADE_ON</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">roi_cascade</span> <span class="o">=</span> <span class="n">ROICascade</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">dim_in</span><span class="p">,</span> <span class="n">spatial_in</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">roi_fast</span> <span class="o">=</span> <span class="n">ROIFast</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">dim_in</span><span class="p">,</span> <span class="n">spatial_in</span><span class="p">)</span>
+        <span class="o">...</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+</section>
+<section id="id8">
+<h2>八、优化器与调度器<a class="headerlink" href="#id8" title="永久链接至标题"></a></h2>
+<p>yaml配置文件的优化器及调度器部分信息(更多默认配置在<code class="docutils literal notranslate"><span class="pre">$Pet/pet/lib/config/solver.py</span></code>)：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">## $Pet/cfgs/vision/COCO/e2e_faster-impr_rcnn_R-50-C4_1x_ms.yaml</span>
+<span class="n">SOLVER</span><span class="p">:</span>
+  <span class="n">OPTIMIZER</span><span class="p">:</span>
+    <span class="n">BASE_LR</span><span class="p">:</span> <span class="mf">0.02</span> <span class="c1"># 基本学习率</span>
+  <span class="n">SCHEDULER</span><span class="p">:</span>
+    <span class="n">TOTAL_ITERS</span><span class="p">:</span> <span class="mi">90000</span>
+    <span class="n">STEPS</span><span class="p">:</span> <span class="p">(</span><span class="mi">60000</span><span class="p">,</span> <span class="mi">80000</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>和其他组件一样，通过解析配置文件相关参数，传给<code class="docutils literal notranslate"><span class="pre">Optimizer</span></code>类(<code class="docutils literal notranslate"><span class="pre">$Pet/pet/lib/utils/analyser.py</span></code>)和<code class="docutils literal notranslate"><span class="pre">LearningRateScheduler</span></code>类(<code class="docutils literal notranslate"><span class="pre">$Pet/pet/lib/utils/lr_scheduler.py</span></code>),从而构建优化器及调度器，仅在训练阶段使用：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">## $Pet/tools/vision/train_net.py</span>
+<span class="kn">from</span> <span class="nn">pet.lib.utils.optimizer</span> <span class="kn">import</span> <span class="n">Optimizer</span>
+<span class="kn">from</span> <span class="nn">pet.lib.utils.lr_scheduler</span> <span class="kn">import</span> <span class="n">LearningRateScheduler</span>
+
+<span class="c1"># 构建优化器</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">Optimizer</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">cfg</span><span class="o">.</span><span class="n">SOLVER</span><span class="o">.</span><span class="n">OPTIMIZER</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">checkpointer</span><span class="o">.</span><span class="n">load_optimizer</span><span class="p">(</span><span class="n">optimizer</span><span class="p">)</span>
+<span class="o">...</span>
+<span class="c1"># 构建调度器</span>
+<span class="n">scheduler</span> <span class="o">=</span> <span class="n">LearningRateScheduler</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="n">cfg</span><span class="o">.</span><span class="n">SOLVER</span><span class="p">,</span> <span class="n">iter_per_epoch</span><span class="o">=</span><span class="n">iter_per_epoch</span><span class="p">)</span>
+<span class="n">scheduler</span> <span class="o">=</span> <span class="n">checkpointer</span><span class="o">.</span><span class="n">load_scheduler</span><span class="p">(</span><span class="n">scheduler</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="id9">
+<h2>九、训练<a class="headerlink" href="#id9" title="永久链接至标题"></a></h2>
+<p>在通过实验配置定义各组件及训练流相关操作后，我们就可以开始实验的训练。
+训练的yaml配置(更多默认配置在<code class="docutils literal notranslate"><span class="pre">/pet/lib/config/data.py</span></code>)：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">## $Pet/cfgs/vision/COCO/e2e_faster-impr_rcnn_R-50-C4_1x_ms.yaml</span>
+<span class="n">TRAIN</span><span class="p">:</span>
+  <span class="n">WEIGHTS</span><span class="p">:</span> <span class="s2">&quot;ckpts/vision/ImageNet/3rdparty/resnet/resnet50a_caffe/resnet50a_caffe_conv1-rgb.pth&quot;</span> <span class="c1"># 预训练权重</span>
+  <span class="n">DATASETS</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;coco_2017_train&quot;</span><span class="p">,)</span>
+  <span class="n">SIZE_DIVISIBILITY</span><span class="p">:</span> <span class="mi">0</span>
+  <span class="n">RESIZE</span><span class="p">:</span>
+    <span class="n">SCALES</span><span class="p">:</span> <span class="p">(</span><span class="mi">640</span><span class="p">,</span> <span class="mi">672</span><span class="p">,</span> <span class="mi">704</span><span class="p">,</span> <span class="mi">736</span><span class="p">,</span> <span class="mi">768</span><span class="p">,</span> <span class="mi">800</span><span class="p">)</span>
+    <span class="n">MAX_SIZE</span><span class="p">:</span> <span class="mi">1333</span>
+</pre></div>
+</div>
+<p>训练实现的核心代码在 <code class="docutils literal notranslate"><span class="pre">$Pet/tools/vision/train_net.py</span></code> 的train函数中定义，详细介绍请看<a class="reference external" href="https://github.com/BUPT-PRIV/Pet-doc/blob/dev/tutorials/training_zh.md">Pet的训练教程</a>。</p>
+</section>
+<section id="id10">
+<h2>十、测试<a class="headerlink" href="#id10" title="永久链接至标题"></a></h2>
+<p>测试的yaml配置(更多默认配置在<code class="docutils literal notranslate"><span class="pre">/pet/lib/config/data.py</span></code>)：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">## $Pet/cfgs/vision/COCO/e2e_faster-impr_rcnn_R-50-C4_1x_ms.yaml </span>
+<span class="n">TEST</span><span class="p">:</span>
+  <span class="n">DATASETS</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;coco_2017_val&quot;</span><span class="p">,)</span>
+  <span class="n">RESIZE</span><span class="p">:</span>
+    <span class="n">SCALE</span><span class="p">:</span> <span class="mi">800</span>
+    <span class="n">MAX_SIZE</span><span class="p">:</span> <span class="mi">1333</span>
+</pre></div>
+</div>
+<p>测试实现的核心代码在 <code class="docutils literal notranslate"><span class="pre">$Pet/tools/vision/test_net.py</span></code> 的test函数中定义，详细介绍请看<a class="reference external" href="https://github.com/BUPT-PRIV/Pet-doc/blob/dev/tutorials/evaluation.md">Pet的测试教程</a>。</p>
+</section>
+<section id="id11">
+<h2>十一、可视化结果<a class="headerlink" href="#id11" title="永久链接至标题"></a></h2>
+<p>在Pet中Faster R-CNN返回每一个目标的类别、置信度分数和边界框坐标。将MSCOCO2017_val中的一张图片的推理结果进行可视化如下图。</p>
+<img src="./test.png" width="60%"></section>
+<section id="id12">
+<h2>参考文献<a class="headerlink" href="#id12" title="永久链接至标题"></a></h2>
+<p>[1] Shaoqing Ren, Kaiming He, Ross Girshick, Jian Sun. Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks. NIPS 2015.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2018-2021, BUPT_PRIV.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

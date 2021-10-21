@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>添加新的模块 &mdash; Pet-doc 0.7.0 文档</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/translations.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜索" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> Pet-doc
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">开始你的第一步</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview/about_pet_zh.html">关于Pet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview/why_pet_zh.html">为什么选择Pet？</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview/install_zh.html">Pet安装</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview/quick_start.html">快速开始</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">使用教程</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage/configs_zh.html">配置系统</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage/hook_zh.html">Hook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage/data_zh.html">数据加载教程</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage/solver_zh.html">迭代优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage/model_building_zh.html">模型构建</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage/training_zh.html">训练教程</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage/evaluation_zh.html">评估教程</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">应用实践</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/basic/cls_zh.html">在ImageNet数据集上训练分类模型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/basic/semseg_zh.html">在ADE20K数据集上训练resnet50+PSP模型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/basic/det_zh.html">在MSCOCO2017数据集上训练Faster R-CNN模型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/basic/parsing_zh.html">Parsing教程/Parsing R-CNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/customer/new_backbone_zh.html">添加新的模块</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/customer/new_dataset_zh.html">添加自定义数据集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/core/pr_zh.html">扩展</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/core/issue_zh.html">Pet问题反馈</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">语言切换</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../switch_language.html"><a href='https://mmdetection.readthedocs.io/en/latest/'>English</a></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../switch_language.html#a-href-https-mmdetection-readthedocs-io-zh-cn-latest-a"><a href='https://mmdetection.readthedocs.io/zh_CN/latest/'>简体中文</a></a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">接口文档（英文）</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Pet-doc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>添加新的模块</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/docs/tutorials/customer/new_backbone_zh.md.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1>添加新的模块<a class="headerlink" href="#id1" title="永久链接至标题"></a></h1>
+<p>Pet支持自定义新的模块与算法，请遵循Pet对应模块的规范。</p>
+<p>Pet的模型构建过程请参考 <a class="reference external" href="../tutorials/model_building_zh">模型构建</a>。本篇示例教程以添加一个骨干网络为例。</p>
+<section id="id2">
+<h2>添加新的骨干网络<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<p>Pet的骨干网络定义在 <code class="docutils literal notranslate"><span class="pre">pet.lib.backbone</span> </code>和 <code class="docutils literal notranslate"><span class="pre">pet.vision.modeling.backbone</span></code> 中，同时完整的骨干网络应支持所有任务类型，对应的输出格式为单个张量（分类任务）与特征列表（其他任务，可配合特征金字塔等特征增强方式）。</p>
+<p>为方便教学与运行，本文仅在 <code class="docutils literal notranslate"><span class="pre">pet.vision.modeling.backbone</span></code> 中定义新的用于分类的backbone，网络仅输出一个维度与特征类别数量相同的张量。</p>
+<section id="id3">
+<h3>网络结构<a class="headerlink" href="#id3" title="永久链接至标题"></a></h3>
+<p>网络共分为两个模块，卷积模块与线性模块。卷积模块中，模型由多个卷积层堆叠，线性模块由多个线性层堆叠，模块内部每层均有激活函数，两个模块之间使用全局平均池化来进行维度统一。</p>
+<p>为展示使用配置文件控制模型结构，</p>
+<p>使用了4个卷积层，卷积核大小分别为7、5、3、1，并且均设置<code class="docutils literal notranslate"><span class="pre">stride=2</span></code>，总共16倍下采样。通过<code class="docutils literal notranslate"><span class="pre">AdaptiveAvgPool</span></code>模块，特征图维度变为<code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">*</span> <span class="pre">1</span> <span class="pre">*</span> <span class="pre">1024</span></code>，再通过三个全连接层，将输出长度变为10，对应Cifar10中每个类别的logit值。</p>
+<p>网络结构如下所示：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">名称</th>
+<th align="center">卷积核大小</th>
+<th align="center">输入特征图维度</th>
+<th align="center">输出特征图维度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">Conv1</td>
+<td align="center">7*7</td>
+<td align="center">3</td>
+<td align="center">64</td>
+</tr>
+<tr>
+<td align="center">Conv2</td>
+<td align="center">5*5</td>
+<td align="center">64</td>
+<td align="center">128</td>
+</tr>
+<tr>
+<td align="center">Conv3</td>
+<td align="center">3*3</td>
+<td align="center">128</td>
+<td align="center">256</td>
+</tr>
+<tr>
+<td align="center">Conv4</td>
+<td align="center">1*1</td>
+<td align="center">256</td>
+<td align="center">1024</td>
+</tr>
+<tr>
+<td align="center">AvgPool</td>
+<td align="center"></td>
+<td align="center">1024</td>
+<td align="center">1024</td>
+</tr>
+<tr>
+<td align="center">FC1</td>
+<td align="center"></td>
+<td align="center">1024</td>
+<td align="center">512</td>
+</tr>
+<tr>
+<td align="center">FC2</td>
+<td align="center"></td>
+<td align="center">512</td>
+<td align="center">32</td>
+</tr>
+<tr>
+<td align="center">FC3</td>
+<td align="center"></td>
+<td align="center">32</td>
+<td align="center">10</td>
+</tr>
+</tbody>
+</table><p>网络层打印结果如下：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GeneralizedCNN</span><span class="p">(</span>
+  <span class="p">(</span><span class="n">backbone</span><span class="p">):</span> <span class="n">ExampleNet</span><span class="p">(</span>
+    <span class="p">(</span><span class="n">conv_module</span><span class="p">):</span> <span class="n">Sequential</span><span class="p">(</span>
+      <span class="p">(</span><span class="mi">0</span><span class="p">):</span> <span class="n">Sequential</span><span class="p">(</span>
+        <span class="p">(</span><span class="mi">0</span><span class="p">):</span> <span class="n">Conv2d</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="n">stride</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">padding</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+        <span class="p">(</span><span class="mi">1</span><span class="p">):</span> <span class="n">ReLU</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+      <span class="p">)</span>
+      <span class="p">(</span><span class="mi">1</span><span class="p">):</span> <span class="n">Sequential</span><span class="p">(</span>
+        <span class="p">(</span><span class="mi">0</span><span class="p">):</span> <span class="n">Conv2d</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">stride</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">padding</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="p">(</span><span class="mi">1</span><span class="p">):</span> <span class="n">ReLU</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+      <span class="p">)</span>
+      <span class="p">(</span><span class="mi">2</span><span class="p">):</span> <span class="n">Sequential</span><span class="p">(</span>
+        <span class="p">(</span><span class="mi">0</span><span class="p">):</span> <span class="n">Conv2d</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">stride</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">padding</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="p">(</span><span class="mi">1</span><span class="p">):</span> <span class="n">ReLU</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+      <span class="p">)</span>
+      <span class="p">(</span><span class="mi">3</span><span class="p">):</span> <span class="n">Sequential</span><span class="p">(</span>
+        <span class="p">(</span><span class="mi">0</span><span class="p">):</span> <span class="n">Conv2d</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="mi">1024</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">stride</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="p">(</span><span class="mi">1</span><span class="p">):</span> <span class="n">ReLU</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+      <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="p">(</span><span class="n">avgpool</span><span class="p">):</span> <span class="n">AdaptiveAvgPool2d</span><span class="p">(</span><span class="n">output_size</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">linear_module</span><span class="p">):</span> <span class="n">Sequential</span><span class="p">(</span>
+      <span class="p">(</span><span class="mi">0</span><span class="p">):</span> <span class="n">Linear</span><span class="p">(</span><span class="n">in_features</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">out_features</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+      <span class="p">(</span><span class="mi">1</span><span class="p">):</span> <span class="n">ReLU6</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+      <span class="p">(</span><span class="mi">2</span><span class="p">):</span> <span class="n">Linear</span><span class="p">(</span><span class="n">in_features</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span> <span class="n">out_features</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+      <span class="p">(</span><span class="mi">3</span><span class="p">):</span> <span class="n">ReLU6</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+      <span class="p">(</span><span class="mi">4</span><span class="p">):</span> <span class="n">Linear</span><span class="p">(</span><span class="n">in_features</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">out_features</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="p">)</span>
+  <span class="p">)</span>
+  <span class="p">(</span><span class="n">global_cls</span><span class="p">):</span> <span class="n">GlobalCls</span><span class="p">(</span>
+    <span class="p">(</span><span class="n">onehot</span><span class="p">):</span> <span class="n">OneHotModule</span><span class="p">(</span>
+      <span class="p">(</span><span class="n">post_processor</span><span class="p">):</span> <span class="n">OneHotPostProcessor</span><span class="p">()</span>
+    <span class="p">)</span>
+  <span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id4">
+<h2>配置文件<a class="headerlink" href="#id4" title="永久链接至标题"></a></h2>
+<p>在<code class="docutils literal notranslate"><span class="pre">pet/lib/config/model/backbone</span></code>文件中，添加ExampleNet的默认配置文件：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">MODEL</span><span class="o">.</span><span class="n">EXAMPLENET</span> <span class="o">=</span> <span class="n">CfgNode</span><span class="p">()</span>
+<span class="n">MODEL</span><span class="o">.</span><span class="n">EXAMPLENET</span><span class="o">.</span><span class="n">FEATURES</span> <span class="o">=</span> <span class="p">[</span><span class="mi">64</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="mi">1024</span><span class="p">]</span> <span class="c1"># 卷积层各层输出维度</span>
+<span class="n">MODEL</span><span class="o">.</span><span class="n">EXAMPLENET</span><span class="o">.</span><span class="n">KERNELS</span> <span class="o">=</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="c1"># 卷积层各层卷积核大小</span>
+<span class="n">MODEL</span><span class="o">.</span><span class="n">EXAMPLENET</span><span class="o">.</span><span class="n">STRIDES</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="c1"># 卷积层各层stride</span>
+<span class="n">MODEL</span><span class="o">.</span><span class="n">EXAMPLENET</span><span class="o">.</span><span class="n">PADDINGS</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="c1"># 卷积层各层padding</span>
+<span class="n">MODEL</span><span class="o">.</span><span class="n">EXAMPLENET</span><span class="o">.</span><span class="n">CONV_ACT</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ReLU&#39;</span><span class="p">,</span> <span class="s1">&#39;ReLU&#39;</span><span class="p">,</span> <span class="s1">&#39;ReLU&#39;</span><span class="p">,</span> <span class="s1">&#39;ReLU&#39;</span><span class="p">]</span> <span class="c1"># 卷积层各层激活函数</span>
+<span class="n">MODEL</span><span class="o">.</span><span class="n">EXAMPLENET</span><span class="o">.</span><span class="n">LINEAR_ACT</span> <span class="o">=</span> <span class="s1">&#39;ReLU6&#39;</span> <span class="c1"># 线性层激活函数</span>
+<span class="n">MODEL</span><span class="o">.</span><span class="n">EXAMPLENET</span><span class="o">.</span><span class="n">FC_FEATURES</span> <span class="o">=</span> <span class="p">[</span><span class="mi">512</span><span class="p">,</span> <span class="mi">32</span><span class="p">]</span> <span class="c1"># 线性层隐层维度</span>
+</pre></div>
+</div>
+<p>在使用时，可以方便地通过修改配置文件来调整模型结构。修改方式可参考<a class="reference external" href="../tutorials/configs_zh">配置系统</a>。</p>
+</section>
+<section id="id5">
+<h2>代码<a class="headerlink" href="#id5" title="永久链接至标题"></a></h2>
+<p>在<code class="docutils literal notranslate"><span class="pre">pet/viison/modeling/backbone</span></code>中，新建<code class="docutils literal notranslate"><span class="pre">ExampleNet.py</span></code>文件。代码如下：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
+<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
+
+<span class="kn">from</span> <span class="nn">pet.lib.layers</span> <span class="kn">import</span> <span class="n">make_conv</span><span class="p">,</span> <span class="n">make_act</span>
+<span class="kn">from</span> <span class="nn">pet.vision.modeling</span> <span class="kn">import</span> <span class="n">registry</span>
+
+
+<span class="k">class</span> <span class="nc">ExampleNet</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ExampleNet</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dim_in</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spatial_in</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">features</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">MODEL</span><span class="o">.</span><span class="n">EXAMPLENET</span><span class="o">.</span><span class="n">FEATURES</span>
+        <span class="n">kernel_size</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">MODEL</span><span class="o">.</span><span class="n">EXAMPLENET</span><span class="o">.</span><span class="n">KERNELS</span>
+        <span class="n">strides</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">MODEL</span><span class="o">.</span><span class="n">EXAMPLENET</span><span class="o">.</span><span class="n">STRIDES</span>
+        <span class="n">paddings</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">MODEL</span><span class="o">.</span><span class="n">EXAMPLENET</span><span class="o">.</span><span class="n">PADDINGS</span>
+        <span class="n">conv_act</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">MODEL</span><span class="o">.</span><span class="n">EXAMPLENET</span><span class="o">.</span><span class="n">CONV_ACT</span>
+        <span class="n">fc_act</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">MODEL</span><span class="o">.</span><span class="n">EXAMPLENET</span><span class="o">.</span><span class="n">LINEAR_ACT</span>
+        <span class="n">fc_features</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">MODEL</span><span class="o">.</span><span class="n">EXAMPLENET</span><span class="o">.</span><span class="n">FC_FEATURES</span>
+        <span class="n">num_classes</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">MODEL</span><span class="o">.</span><span class="n">ONEHOT</span><span class="o">.</span><span class="n">NUM_CLASSES</span>
+
+        <span class="n">features</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim_in</span><span class="p">)</span>  <span class="c1"># 添加输入维度</span>
+
+        <span class="n">conv_layers</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">kernel</span><span class="p">,</span> <span class="n">stride</span><span class="p">,</span> <span class="n">pad</span><span class="p">,</span> <span class="n">act</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">kernel_size</span><span class="p">,</span> <span class="n">strides</span><span class="p">,</span> <span class="n">paddings</span><span class="p">,</span> <span class="n">conv_act</span><span class="p">)):</span>
+            <span class="n">conv_layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">make_conv</span><span class="p">(</span>
+                    <span class="n">in_channels</span><span class="o">=</span><span class="n">features</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                    <span class="n">out_channels</span><span class="o">=</span><span class="n">features</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="n">kernel_size</span><span class="o">=</span><span class="n">kernel</span><span class="p">,</span>
+                    <span class="n">stride</span><span class="o">=</span><span class="n">stride</span><span class="p">,</span>
+                    <span class="n">padding</span><span class="o">=</span><span class="n">pad</span><span class="p">,</span>
+                    <span class="n">act</span><span class="o">=</span><span class="n">make_act</span><span class="p">(</span><span class="n">act</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv_module</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="o">*</span><span class="n">conv_layers</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">avgpool</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">AdaptiveAvgPool2d</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">fc_features</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">features</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">fc_layers</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fc_features</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">fc_layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">fc_features</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">fc_features</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="n">fc_layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">make_act</span><span class="p">(</span><span class="n">fc_act</span><span class="p">))</span>
+        <span class="n">fc_layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">fc_features</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">num_classes</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">linear_module</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="o">*</span><span class="n">fc_layers</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dim_out</span> <span class="o">=</span> <span class="p">[</span><span class="n">num_classes</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spatial_out</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Args:</span>
+<span class="sd">            x (tensor)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            x (tensor)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv_module</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">avgpool</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear_module</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span>
+
+<span class="c1"># ---------------------------------------------------------------------------- #</span>
+<span class="c1"># ExampleNet</span>
+<span class="c1"># ---------------------------------------------------------------------------- #</span>
+<span class="nd">@registry</span><span class="o">.</span><span class="n">BACKBONES</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;example_net&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">examplenet</span><span class="p">(</span><span class="n">cfg</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Args:</span>
+<span class="sd">        cfg (CfgNode)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        nn.Module</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">ExampleNet</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span>
+</pre></div>
+</div>
+<p><strong>注意事项:</strong></p>
+<ul>
+<li><p>网络的入参有cfg来结合配置文件修改模型结构。</p></li>
+<li><p>完整的backbone应该有两种输出格式，分别用于分类任务和其他任务。</p></li>
+<li><p>用registry注册该backbone，并设置好调用字段。</p></li>
+<li><p>需要在<code class="docutils literal notranslate"><span class="pre">pet/viison/modeling/backbone/__init__.py</span></code>中导入该backbone</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">.ExampleNet</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="id6">
+<h2>使用<a class="headerlink" href="#id6" title="永久链接至标题"></a></h2>
+<p>配置文件编写可以参考已有的Cifar10配置文件，需要修改 <code class="docutils literal notranslate"><span class="pre">MODEL.BACKBONE</span></code> 为<code class="docutils literal notranslate"> <span class="pre">&quot;example_net&quot;</span></code>。</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">MISC</span><span class="p">:</span>
+  <span class="nt">CKPT</span><span class="p">:</span> <span class="s">&quot;ckpts/vision/Cifar/examplenet_cifar10&quot;</span>
+  <span class="nt">CUDNN</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="nt">MODEL</span><span class="p">:</span>
+  <span class="nt">BACKBONE</span><span class="p">:</span> <span class="s">&quot;example_net&quot;</span>
+  <span class="nt">GLOBAL_HEAD</span><span class="p">:</span>
+    <span class="nt">CLS</span><span class="p">:</span>
+      <span class="nt">ONEHOT_ON</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">True</span>
+  <span class="nt">ONEHOT</span><span class="p">:</span>
+    <span class="nt">NUM_CLASSES</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="nt">SOLVER</span><span class="p">:</span>
+  <span class="nt">OPTIMIZER</span><span class="p">:</span>
+    <span class="nt">BASE_LR</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0.1</span>
+    <span class="nt">WEIGHT_DECAY_NORM</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0.0001</span>
+  <span class="nt">SCHEDULER</span><span class="p">:</span>
+    <span class="nt">TOTAL_EPOCHS</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">164</span>
+    <span class="nt">POLICY</span><span class="p">:</span> <span class="s">&quot;STEP&quot;</span>
+    <span class="nt">STEPS</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(81, 122)</span>
+    <span class="nt">WARM_UP_EPOCHS</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="nt">DATA</span><span class="p">:</span>
+  <span class="nt">PIXEL_MEAN</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(0.4914, 0.4822, 0.4465)</span>
+  <span class="nt">PIXEL_STD</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(0.2023, 0.1994, 0.2010)</span>
+  <span class="nt">DATASET_TYPE</span><span class="p">:</span> <span class="s">&quot;cifar_dataset&quot;</span>
+  <span class="nt">SAMPLER</span><span class="p">:</span>
+    <span class="nt">ASPECT_RATIO_GROUPING</span><span class="p">:</span> <span class="p p-Indicator">[]</span>
+<span class="nt">TRAIN</span><span class="p">:</span>
+  <span class="nt">DATASETS</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(&quot;cifar10&quot;,)</span>
+  <span class="nt">BATCH_SIZE</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">128</span>
+  <span class="nt">TRANSFORMS</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(&quot;resize&quot;, &quot;random_crop&quot;, &quot;random_horizontal_flip&quot;, &quot;to_tensor&quot;, &quot;normalize&quot;)</span>
+  <span class="nt">RESIZE</span><span class="p">:</span>
+    <span class="nt">SCALES</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(32,)</span>
+    <span class="nt">MAX_SIZE</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">-1</span>
+    <span class="nt">SCALES_SAMPLING</span><span class="p">:</span> <span class="s">&quot;choice&quot;</span>
+  <span class="nt">RANDOM_CROP</span><span class="p">:</span>
+    <span class="nt">CROP_SCALES</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">((32, 32),)</span>
+    <span class="nt">BORDER</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">128</span>
+<span class="nt">TEST</span><span class="p">:</span>
+  <span class="nt">DATASETS</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(&#39;cifar10&#39;,)</span>
+  <span class="nt">IMS_PER_GPU</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">16</span>
+  <span class="nt">RESIZE</span><span class="p">:</span>
+    <span class="nt">SCALE</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">32</span>
+    <span class="nt">MAX_SIZE</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">-1</span>
+  <span class="nt">CENTER_CROP</span><span class="p">:</span>
+    <span class="nt">CROP_SCALES</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(32, 32)</span>
+</pre></div>
+</div>
+<p>若想修改网络的模型结构，可根据上一步定义的参数，在yaml文件或启动的命令中指定。</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2018-2021, BUPT_PRIV.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

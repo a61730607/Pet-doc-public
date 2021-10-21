@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Benchmark Face &mdash; Pet-doc 0.7.0 文档</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/translations.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Pet-doc
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">开始你的第一步</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="overview/about_pet_zh.html">关于Pet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview/why_pet_zh.html">为什么选择Pet？</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview/install_zh.html">Pet安装</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview/quick_start.html">快速开始</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">使用教程</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="usage/configs_zh.html">配置系统</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage/hook_zh.html">Hook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage/data_zh.html">数据加载教程</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage/solver_zh.html">迭代优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage/model_building_zh.html">模型构建</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage/training_zh.html">训练教程</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage/evaluation_zh.html">评估教程</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">应用实践</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/basic/cls_zh.html">在ImageNet数据集上训练分类模型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/basic/semseg_zh.html">在ADE20K数据集上训练resnet50+PSP模型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/basic/det_zh.html">在MSCOCO2017数据集上训练Faster R-CNN模型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/basic/parsing_zh.html">Parsing教程/Parsing R-CNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/customer/new_backbone_zh.html">添加新的模块</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/customer/new_dataset_zh.html">添加自定义数据集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/core/pr_zh.html">扩展</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/core/issue_zh.html">Pet问题反馈</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">语言切换</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="switch_language.html"><a href='https://mmdetection.readthedocs.io/en/latest/'>English</a></a></li>
+<li class="toctree-l1"><a class="reference internal" href="switch_language.html#a-href-https-mmdetection-readthedocs-io-zh-cn-latest-a"><a href='https://mmdetection.readthedocs.io/zh_CN/latest/'>简体中文</a></a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">接口文档（英文）</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Pet-doc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Benchmark Face</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/BENCHMARK-FACE.md.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="benchmark-face">
+<h1>Benchmark Face<a class="headerlink" href="#benchmark-face" title="永久链接至标题"></a></h1>
+<ol class="simple">
+<li><p><strong>Casia</strong>:
+Train set: Identities(10K), images(0.5M).</p></li>
+</ol>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">Backbone</th>
+<th align="center">Head</th>
+<th align="center">Loss</th>
+<th align="center">Flops/Params</th>
+<th align="center">lfw</th>
+<th align="center">agedb30</th>
+<th align="center">cfp_fp</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">MobileFaceNet</td>
+<td align="center">ArcFace</td>
+<td align="center">Softmax</td>
+<td align="center">233.8M/1M</td>
+<td align="center">98.95</td>
+<td align="center">92.12</td>
+<td align="center">93.43</td>
+</tr>
+<tr>
+<td align="center">MobileNetV3</td>
+<td align="center">ArcFace</td>
+<td align="center">Softmax</td>
+<td align="center">210.86M/3.2M</td>
+<td align="center">98.98</td>
+<td align="center">92.22</td>
+<td align="center">94.83</td>
+</tr>
+<tr>
+<td align="center">L-ResNet-50</td>
+<td align="center">ArcFace</td>
+<td align="center">Softmax</td>
+<td align="center">4087.14M/74.9M</td>
+<td align="center">99.38</td>
+<td align="center">93.20</td>
+<td align="center">95.61</td>
+</tr>
+<tr>
+<td align="center">ResNetIR-50</td>
+<td align="center">ArcFace</td>
+<td align="center">Softmax</td>
+<td align="center">6296.49M/43.6M</td>
+<td align="center">99.43</td>
+<td align="center">94.48</td>
+<td align="center">96.79</td>
+</tr>
+<tr>
+<td align="center">ResNetIRSE-50</td>
+<td align="center">ArcFace</td>
+<td align="center">Softmax</td>
+<td align="center">6296.71M/43.8M</td>
+<td align="center">99.40</td>
+<td align="center">94.00</td>
+<td align="center">97.07</td>
+</tr>
+</tbody>
+</table><ol class="simple">
+<li><p><strong>MS-1M-Retinaface</strong>:
+Train set: classes(85K), images(5.8M).</p></li>
+</ol>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">Backbone</th>
+<th align="center">Head</th>
+<th align="center">Loss</th>
+<th align="center">Flops/Params</th>
+<th align="center">lfw</th>
+<th align="center">agedb30</th>
+<th align="center">cfp_fp</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">MobileFaceNet</td>
+<td align="center">ArcFace</td>
+<td align="center">Softmax</td>
+<td align="center">233.8M/1M</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">MobileNetV3</td>
+<td align="center">ArcFace</td>
+<td align="center">Softmax</td>
+<td align="center">210.86M/3.2M</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">L-ResNet-50</td>
+<td align="center">ArcFace</td>
+<td align="center">Softmax</td>
+<td align="center">4087.14M/74.9M</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">ResNetIR-50</td>
+<td align="center">ArcFace</td>
+<td align="center">Softmax</td>
+<td align="center">6296.49M/43.6M</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">ResNetIRSE-50</td>
+<td align="center">ArcFace</td>
+<td align="center">Softmax</td>
+<td align="center">6296.71M/43.8M</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table></section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2018-2021, BUPT_PRIV.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

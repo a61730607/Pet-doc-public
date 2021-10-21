@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parsing教程/Parsing R-CNN &mdash; Pet-doc 0.7.0 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="添加新的模块" href="../customer/new_backbone_zh.html" />
+    <link rel="prev" title="在MSCOCO2017数据集上训练Faster R-CNN模型" href="det_zh.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> Pet-doc
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">开始你的第一步</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview/about_pet_zh.html">关于Pet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../overview/why_pet_zh.html">为什么选择Pet？</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../overview/install_zh.html">Pet安装</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../overview/quick_start.html">快速开始</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">使用教程</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/configs_zh.html">配置系统</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/hook_zh.html">Hook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/data_zh.html">数据加载教程</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/solver_zh.html">迭代优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/model_building_zh.html">模型构建</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/training_zh.html">训练教程</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/evaluation_zh.html">评估教程</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">应用实践</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="cls_zh.html">在ImageNet数据集上训练分类模型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="semseg_zh.html">在ADE20K数据集上训练resnet50+PSP模型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="det_zh.html">在MSCOCO2017数据集上训练Faster R-CNN模型</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Parsing教程/Parsing R-CNN</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">一、数据制备</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">二、用法示例：</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">三、数据载入</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#parsing-r-cnn">四、Parsing R-CNN网络结构</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#gce">五、GCE模块</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pbd">六、特征转换与分支网络解耦(PBD)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#psserr">七、PSS与ERR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">八、训练</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">九、测试</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">十、人体部位分析任务的评价指标</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id7">参考文献</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../customer/new_backbone_zh.html">添加新的模块</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../customer/new_dataset_zh.html">添加自定义数据集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/pr_zh.html">扩展</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/issue_zh.html">Pet问题反馈</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">语言切换</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../switch_language.html"><a href='https://mmdetection.readthedocs.io/en/latest/'>English</a></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../switch_language.html#a-href-https-mmdetection-readthedocs-io-zh-cn-latest-a"><a href='https://mmdetection.readthedocs.io/zh_CN/latest/'>简体中文</a></a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">接口文档（英文）</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Pet-doc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">&lt;no title&gt;</a> &raquo;</li>
+      <li>Parsing教程/Parsing R-CNN</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/tutorials/basic/parsing_zh.md.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <ul class="simple">
+<li><p><strong>NOTE</strong>:</p></li>
+</ul>
+<p>点击<a class="reference external" href="https://github.com/BUPT-PRIV/Pet-Priv/blob/main/tools/train_net_all.py">此处</a>下载仅用于训练的示例代码.</p>
+<section id="parsing-parsing-r-cnn">
+<h1>Parsing教程/Parsing R-CNN<a class="headerlink" href="#parsing-parsing-r-cnn" title="永久链接至标题"></a></h1>
+<p>本部分以Parsing RCNN在CIHP数据集上的训练和测试为例，介绍使用Pet训练以及测试Parsing R-CNN模型进行人体部位分割的主要步骤。主要讲解组件的调用，部分实现细节请查阅系统组件的相应部分。在阅读本教程的之前我们强烈建议您阅读原始论文<a class="reference external" href="https://arxiv.org/abs/1811.12596">Parsing R-CNN</a>[1]、<a class="reference external" href="https://arxiv.org/pdf/1808.00157v1">PGN</a>[2]以了解更多关于Parsing R-CNN的算法原理。</p>
+<section id="id1">
+<h2>一、数据制备<a class="headerlink" href="#id1" title="永久链接至标题"></a></h2>
+<p>CIHP是一个目标建立在多人体解析研究的数据集，数据集中收集了多人体实例级的图像，并提供了实例级人体解析的标注。CIHP数据集包含28280个训练样本、5000张验证集和5000张测试集，共有38280个多人图像。本教程帮助您下载CIHP数据集并按照pet要求的标注格式进行数据集的转换。</p>
+<p>Pet需要从CIHP中下载并解压下列文件：</p>
+<ul class="simple">
+<li><p>图像数据下载到<code class="docutils literal notranslate"><span class="pre">$Pet/data/CIHP/images/</span></code>文件夹中</p></li>
+<li><p>标签数据下载到<code class="docutils literal notranslate"><span class="pre">$Pet/data/CIHP/annotations/</span></code>文件夹中</p></li>
+</ul>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">文件名</th>
+<th align="center">大小</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><a href="https://pan.baidu.com/s/1nvqmZBN#list/path=%2Fsharelink2787269280-523292635003760%2FLIP%2FCIHP&amp;parentPath=%2Fsharelink2787269280-523292635003760">instance-level_human_parsing.tar.gz</a></td>
+<td align="center">1.89GB</td>
+</tr>
+</tbody>
+</table><p>Pet为用户提供了下载并提取CIHP数据集的脚本，用户可以通过下载并运行cihp.py完成CIHP数据集的准备。用户通过在终端中运行如下命令完成数据集的处理。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>python cihp.py –dataset_dir $download path -target_dir $save path
+</pre></div>
+</div>
+<p>如果您具有丰富的人体部位分析算法的研究经验，您也可以直接在Pet中运行<code class="docutils literal notranslate"><span class="pre">$Pet/tools/train_net_all.py</span></code>脚本立即开始训练您的Parsing R-CNN模型.</p>
+</section>
+<section id="id2">
+<h2>二、用法示例：<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<ul class="simple">
+<li><p>使用8块GPU在<code class="docutils literal notranslate"><span class="pre">CIHP_train</span></code>上训练一个端到端的Parsing R-CNN模型：</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cd $Pet
+
+CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python -m torch.distributed.launch --nproc_per_node=8 tools/train_net_all.py --cfg cfgs/vision/CIHP/e2e_parsing_rcnn_R-50-FPN_1x_ms.yaml
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>使用8块GPU在<code class="docutils literal notranslate"><span class="pre">CIHP_val</span></code>数据集上测试Parsing R-CNN模型：</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cd $Pet
+
+CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python tools/test_net_all.py --cfg cfgs/vision/CIHP/e2e_parsing_rcnn_R-50-FPN_1x_ms.yaml 
+</pre></div>
+</div>
+<p>在进行任何与模型训练和测试有关的操作之前，需要先选择一个指定的YAML文件，明确对数据集、模型结构、优化策略以及其他重要参数的需求与设置，本教程以<code class="docutils literal notranslate"><span class="pre">$Pet/cfgs/vision/CIHP/e2e_parsing_rcnn_R-50-FPN_1x_ms.yaml</span> </code>为例，讲解训练过程中所需要的关键配置，该套配置将指导此Parsing R-CNN模型训练以及测试的全部步骤和细节。</p>
+</section>
+<section id="id3">
+<h2>三、数据载入<a class="headerlink" href="#id3" title="永久链接至标题"></a></h2>
+<p>确保CIHP数据集已经存放在您的硬盘中，并按照数据制备中的文件结构整理好CIHP数据集的文件结构，接下来开始加载<code class="docutils literal notranslate"><span class="pre">CIHP_train</span></code>训练集。</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create data loder</span>
+<span class="n">datasets</span> <span class="o">=</span> <span class="n">build_dataset</span><span class="p">(</span><span class="n">cfg</span><span class="o">.</span><span class="n">TRAIN</span><span class="o">.</span><span class="n">DATASETS</span><span class="p">,</span> <span class="n">is_train</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">train_loader</span> <span class="o">=</span> <span class="n">make_train_data_loader</span><span class="p">(</span>
+    <span class="n">datasets</span><span class="p">,</span>
+    <span class="n">is_distributed</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">distributed</span><span class="p">,</span>
+    <span class="n">start_iter</span><span class="o">=</span><span class="n">scheduler</span><span class="o">.</span><span class="n">iteration</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>目前训练基于区域的两阶段实例分析模型都需要将图像的长和宽按照等比例缩放，Parsing R-CNN中将图像短边缩放到一系列的基本尺寸来丰富CIHP数据中的人体样本实例的尺度，在配置文件中将<code class="docutils literal notranslate"><span class="pre">TRAIN.SCALES</span></code>设置为<code class="docutils literal notranslate"><span class="pre">(512,</span> <span class="pre">640,</span> <span class="pre">704,</span> <span class="pre">768,</span> <span class="pre">800,</span> <span class="pre">864)</span></code>，同时将<code class="docutils literal notranslate"><span class="pre">TRAIN.MAX_SIZE</span></code>设置为<code class="docutils literal notranslate"><span class="pre">1400</span></code>限制图像的最大尺寸。</p></li>
+<li><p>Parsing R-CNN还对训练数据进行了随机水平翻转来进行数据增广，提升模型的泛化性，Dataloader中的图片、检测框与分割掩模的transform前后的可视化</p></li>
+<li><p>数据载入组件完成了图像数据以及标注信息的读取，数据载入组件输出的每个批次的数据中包含图片数据、图片中物体的类别、物体的包围框、以及与物体数量相同的人体部位分割掩模（每个掩模只包含一个目标的前景掩码）。</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">704</span><span class="p">,</span> <span class="mi">1024</span><span class="p">)</span>
+<span class="n">label</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+<span class="n">box</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">parsing</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">680</span><span class="p">,</span> <span class="mi">1021</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="parsing-r-cnn">
+<h2>四、Parsing R-CNN网络结构<a class="headerlink" href="#parsing-r-cnn" title="永久链接至标题"></a></h2>
+<p>Pet使用<code class="docutils literal notranslate"><span class="pre">Generalized_RCNN</span></code>来搭建Parsing R-CNN网络。只需要在YAML文件中添加’PRCNN’参数，即可构建Parsing R-CNN网络的人体部位分析的分支网络：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">PRCNN</span><span class="p">:</span>
+  <span class="n">ROI_XFORM_RESOLUTION</span><span class="p">:</span> <span class="mi">32</span>
+  <span class="n">ROI_XFORM_SAMPLING_RATIO</span><span class="p">:</span> <span class="mi">2</span>
+  <span class="n">RESOLUTION</span><span class="p">:</span> <span class="mi">128</span>
+  <span class="n">NUM_PARSING</span><span class="p">:</span> <span class="mi">20</span>
+  <span class="n">ROI_BATCH_SIZE</span><span class="p">:</span> <span class="mi">32</span>
+  <span class="n">FINEST_LEVEL_ROI</span><span class="p">:</span> <span class="kc">True</span>
+  <span class="n">ROI_PARSING_HEAD</span><span class="p">:</span> <span class="s2">&quot;roi_asppv3_convX_head&quot;</span>
+  <span class="n">GCE_HEAD</span><span class="p">:</span>
+    <span class="n">NUM_CONVS_BEFORE_ASPPV3</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="n">NUM_CONVS_AFTER_ASPPV3</span><span class="p">:</span> <span class="mi">4</span>
+</pre></div>
+</div>
+<p>在<code class="docutils literal notranslate"><span class="pre">Generalized_RCNN</span></code>中，只需要在<code class="docutils literal notranslate"><span class="pre">Fast_RCNN</span></code>之后添加<code class="docutils literal notranslate"><span class="pre">Parsing_RCNN</span></code>分支网络的构建代码即可，其他部分与Mask R-CNN网络的构建方式类似。</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Generalized_RCNN</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_train</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+    <span class="o">...</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">cfg</span><span class="o">.</span><span class="n">MODEL</span><span class="o">.</span><span class="n">RPN_ONLY</span><span class="p">:</span>
+	<span class="bp">self</span><span class="o">.</span><span class="n">Fast_RCNN</span> <span class="o">=</span> <span class="n">FastRCNN</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim_in</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">spatial_scale</span><span class="p">)</span>
+
+	<span class="k">if</span> <span class="n">cfg</span><span class="o">.</span><span class="n">MODEL</span><span class="o">.</span><span class="n">PARSING_ON</span><span class="p">:</span>
+	    <span class="bp">self</span><span class="o">.</span><span class="n">Parsing_RCNN</span> <span class="o">=</span> <span class="n">ParsingRCNN</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim_in</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">spatial_scale</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Parsing R-CNN网络在除了包含区域建议网络（RPN)、特征金字塔网络（FPN）以及目标检测分支网络（FastRCNN）之外，最重要的分支网络就是<strong>人体部位分析分支网络</strong>（ParsingRCNN)。根据YAML文件的设置，<code class="docutils literal notranslate"><span class="pre">ParsingRCNN</span></code>网络的主体结构是<code class="docutils literal notranslate"><span class="pre">roi_gce_head</span></code>，<code class="docutils literal notranslate"><span class="pre">roi_gce_head</span></code>主要由<strong>几何与周边信息编码模块</strong>（Geometric and Context Encoding， GCE）与<strong>特征转换模块</strong>组成。</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nd">@registry</span><span class="o">.</span><span class="n">ROI_PARSING_HEADS</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;roi_gce_head&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">roi_gce_head</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dim_in</span><span class="p">,</span> <span class="n">spatial_scale</span><span class="p">):</span>
+    <span class="nb">super</span><span class="p">(</span><span class="n">roi_gce_head</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+    <span class="n">resolution</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">PRCNN</span><span class="o">.</span><span class="n">ROI_XFORM_RESOLUTION</span>
+    <span class="n">sampling_ratio</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">PRCNN</span><span class="o">.</span><span class="n">ROI_XFORM_SAMPLING_RATIO</span>
+    <span class="n">pooler</span> <span class="o">=</span> <span class="n">Pooler</span><span class="p">(</span>
+	<span class="n">output_size</span><span class="o">=</span><span class="p">(</span><span class="n">resolution</span><span class="p">,</span> <span class="n">resolution</span><span class="p">),</span>
+	<span class="n">scales</span><span class="o">=</span><span class="n">spatial_scale</span><span class="p">,</span>
+	<span class="n">sampling_ratio</span><span class="o">=</span><span class="n">sampling_ratio</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">pooler</span> <span class="o">=</span> <span class="n">pooler</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">dim_in</span> <span class="o">=</span> <span class="n">dim_in</span>
+
+    <span class="n">use_nl</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">PRCNN</span><span class="o">.</span><span class="n">GCE_HEAD</span><span class="o">.</span><span class="n">USE_NL</span>
+    <span class="n">use_bn</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">PRCNN</span><span class="o">.</span><span class="n">GCE_HEAD</span><span class="o">.</span><span class="n">USE_BN</span>
+    <span class="n">use_gn</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">PRCNN</span><span class="o">.</span><span class="n">GCE_HEAD</span><span class="o">.</span><span class="n">USE_GN</span>
+    <span class="n">conv_dim</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">PRCNN</span><span class="o">.</span><span class="n">GCE_HEAD</span><span class="o">.</span><span class="n">CONV_DIM</span>
+    <span class="n">asppv3_dim</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">PRCNN</span><span class="o">.</span><span class="n">GCE_HEAD</span><span class="o">.</span><span class="n">ASPPV3_DIM</span>
+    <span class="n">num_convs_before_asppv3</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">PRCNN</span><span class="o">.</span><span class="n">GCE_HEAD</span><span class="o">.</span><span class="n">NUM_CONVS_BEFORE_ASPPV3</span>
+    <span class="n">asppv3_dilation</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">PRCNN</span><span class="o">.</span><span class="n">GCE_HEAD</span><span class="o">.</span><span class="n">ASPPV3_DILATION</span>
+    <span class="n">num_convs_after_asppv3</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">PRCNN</span><span class="o">.</span><span class="n">GCE_HEAD</span><span class="o">.</span><span class="n">NUM_CONVS_AFTER_ASPPV3</span>
+
+    <span class="c1"># convx before asppv3 module</span>
+    <span class="n">before_asppv3_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_convs_before_asppv3</span><span class="p">):</span>
+	<span class="n">before_asppv3_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+	    <span class="n">make_conv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim_in</span><span class="p">,</span> <span class="n">conv_dim</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">use_bn</span><span class="o">=</span><span class="n">use_bn</span><span class="p">,</span> <span class="n">use_gn</span><span class="o">=</span><span class="n">use_gn</span><span class="p">,</span> <span class="n">use_relu</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+	<span class="p">)</span>
+	<span class="bp">self</span><span class="o">.</span><span class="n">dim_in</span> <span class="o">=</span> <span class="n">conv_dim</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">conv_before_asppv3</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="o">*</span><span class="n">before_asppv3_list</span><span class="p">)</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">before_asppv3_list</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+
+    <span class="c1"># asppv3 module</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">asppv3</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">asppv3</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+	<span class="n">make_conv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim_in</span><span class="p">,</span> <span class="n">asppv3_dim</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">use_bn</span><span class="o">=</span><span class="n">use_bn</span><span class="p">,</span> <span class="n">use_gn</span><span class="o">=</span><span class="n">use_gn</span><span class="p">,</span> <span class="n">use_relu</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">for</span> <span class="n">dilation</span> <span class="ow">in</span> <span class="n">asppv3_dilation</span><span class="p">:</span>
+	<span class="bp">self</span><span class="o">.</span><span class="n">asppv3</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+	    <span class="n">make_conv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim_in</span><span class="p">,</span> <span class="n">asppv3_dim</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">dilation</span><span class="o">=</span><span class="n">dilation</span><span class="p">,</span> <span class="n">use_bn</span><span class="o">=</span><span class="n">use_bn</span><span class="p">,</span> <span class="n">use_gn</span><span class="o">=</span><span class="n">use_gn</span><span class="p">,</span>
+		      <span class="n">use_relu</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+	<span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">asppv3</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">asppv3</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">im_pool</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+	<span class="n">nn</span><span class="o">.</span><span class="n">AdaptiveAvgPool2d</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+	<span class="n">make_conv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim_in</span><span class="p">,</span> <span class="n">asppv3_dim</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">use_bn</span><span class="o">=</span><span class="n">use_bn</span><span class="p">,</span> <span class="n">use_gn</span><span class="o">=</span><span class="n">use_gn</span><span class="p">,</span> <span class="n">use_relu</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">dim_in</span> <span class="o">=</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">asppv3_dilation</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">asppv3_dim</span>
+
+    <span class="n">feat_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">feat_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+	<span class="n">make_conv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim_in</span><span class="p">,</span> <span class="n">conv_dim</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">use_bn</span><span class="o">=</span><span class="n">use_bn</span><span class="p">,</span> <span class="n">use_gn</span><span class="o">=</span><span class="n">use_gn</span><span class="p">,</span> <span class="n">use_relu</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">use_nl</span><span class="p">:</span>
+	<span class="n">feat_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+	    <span class="n">NonLocal2d</span><span class="p">(</span><span class="n">conv_dim</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">conv_dim</span> <span class="o">*</span> <span class="n">cfg</span><span class="o">.</span><span class="n">PRCNN</span><span class="o">.</span><span class="n">GCE_HEAD</span><span class="o">.</span><span class="n">NL_RATIO</span><span class="p">),</span> <span class="n">conv_dim</span><span class="p">,</span> <span class="n">use_gn</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+	<span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">feat</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="o">*</span><span class="n">feat_list</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">dim_in</span> <span class="o">=</span> <span class="n">conv_dim</span>
+
+    <span class="c1"># convx after asppv3 module</span>
+    <span class="k">assert</span> <span class="n">num_convs_after_asppv3</span> <span class="o">&gt;=</span> <span class="mi">1</span>
+    <span class="n">after_asppv3_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_convs_after_asppv3</span><span class="p">):</span>
+	<span class="n">after_asppv3_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+	    <span class="n">make_conv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim_in</span><span class="p">,</span> <span class="n">conv_dim</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">use_bn</span><span class="o">=</span><span class="n">use_bn</span><span class="p">,</span> <span class="n">use_gn</span><span class="o">=</span><span class="n">use_gn</span><span class="p">,</span> <span class="n">use_relu</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+	<span class="p">)</span>
+	<span class="bp">self</span><span class="o">.</span><span class="n">dim_in</span> <span class="o">=</span> <span class="n">conv_dim</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">conv_after_asppv3</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="o">*</span><span class="n">after_asppv3_list</span><span class="p">)</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">after_asppv3_list</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">dim_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim_in</span>
+
+<span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">proposals</span><span class="p">):</span>
+    <span class="n">resolution</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">PRCNN</span><span class="o">.</span><span class="n">ROI_XFORM_RESOLUTION</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pooler</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">proposals</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv_before_asppv3</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+	<span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv_before_asppv3</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="n">asppv3_out</span> <span class="o">=</span> <span class="p">[</span><span class="n">interpolate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">im_pool</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">scale_factor</span><span class="o">=</span><span class="n">resolution</span><span class="p">,</span> 
+			      <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;bilinear&quot;</span><span class="p">,</span> <span class="n">align_corners</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">asppv3</span><span class="p">)):</span>
+	<span class="n">asppv3_out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">asppv3</span><span class="p">[</span><span class="n">i</span><span class="p">](</span><span class="n">x</span><span class="p">))</span>
+    <span class="n">asppv3_out</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">asppv3_out</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">asppv3_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">feat</span><span class="p">(</span><span class="n">asppv3_out</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv_after_asppv3</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+	<span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv_after_asppv3</span><span class="p">(</span><span class="n">asppv3_out</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">x</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>GCE模块的作用是丰富分支网络特征图的感受野并编码人体部位之间的几何与周边信息</p></li>
+</ul>
+</section>
+<section id="gce">
+<h2>五、GCE模块<a class="headerlink" href="#gce" title="永久链接至标题"></a></h2>
+<p>人体部位相互之间的关系在人体部位分析任务中是十分重要的信息，简单地使用常规的卷积层堆叠的方式来构建ParsingRCNN分支网络并不能很好地捕获如左、右手，左、右脚以及不同人物的肢体之间的关系，一方面是由于感受野的不足，另一方面是因为常规卷积普遍地提取目标的视觉特征而没有将更多的注意力放在人体部位的关系捕获上。GCE模块使用<a class="reference external" href="https://arxiv.org/pdf/1711.07971.pdf">Non-local Neural Networks</a>[3]中提出的Non-local结构来加强捕获这种属于人体部位之间的几何与上下文关系。</p>
+<p>Parsing R-CNN论文中对GCE模块中Non-local与ASPP结构的退化实验，Non-local模块只有在特征图具有丰富感受野的情况下才能发挥作用，单独使用Non-local模块并不能给人体部位分析模型的精度带来提升。ASPP模块被用来丰富特征图的感受野，单独使用ASPP没开来增大感受野也可以更好地捕获人体部位之间的几何与上下文关系。关于ASPP结构的详细信息请参考<a class="reference external" href="https://arxiv.org/pdf/1706.05587">Deeplab-v3</a>[4]。</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">mIoU</th>
+<th align="center">AP@50</th>
+<th align="center">AP@vol</th>
+<th align="center">PCP@50</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">baseline</td>
+<td align="center">50.7</td>
+<td align="center">47.9</td>
+<td align="center">47.6</td>
+<td align="center">49.7</td>
+</tr>
+<tr>
+<td align="center">ASPP only</td>
+<td align="center">51.9</td>
+<td align="center">51.1</td>
+<td align="center">48.3</td>
+<td align="center">51.4</td>
+</tr>
+<tr>
+<td align="center">Non-local only</td>
+<td align="center">50.5</td>
+<td align="center">47.0</td>
+<td align="center">47.6</td>
+<td align="center">48.9</td>
+</tr>
+<tr>
+<td align="center">GCE</td>
+<td align="center">52.7</td>
+<td align="center">53.2</td>
+<td align="center">49.7</td>
+<td align="center">52.6</td>
+</tr>
+</tbody>
+</table><p>注：基准实验采用<a class="reference external" href="https://arxiv.org/abs/1703.06870">Mask R-CNN</a>[5]的网络结构</p>
+<ul class="simple">
+<li><p>特征转换模块将从主干网络特征图上截取出来的特征向任务特征进行转换，由几个堆叠的卷积层即可完成；</p></li>
+</ul>
+</section>
+<section id="pbd">
+<h2>六、特征转换与分支网络解耦(PBD)<a class="headerlink" href="#pbd" title="永久链接至标题"></a></h2>
+<p>在基于区域的实例分析方法中，每个分支网络诸如Mask R-CNN、Keypoint R-CNN、Parsing R-CNN都可以被理解为一个针对所属任务的独立神经网络，然而大多数工作并未对分支网络的结构进行详细的研究与设计。基于人体部位分析分支的主体结构GCE模块，Parsing R-CNN进行了人体部位分析分支解耦（Parsing Branch Decoupling，PBD）将分支网络的结构分为<strong>前GCE结构</strong>、<strong>GCE结构</strong>和<strong>后GCE结构</strong>，并对他们的作用进行了实验分析。</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">mIoU</th>
+<th align="center">AP@50</th>
+<th align="center">AP@vol</th>
+<th align="center">PCP@50</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">baseline</td>
+<td align="center">52.7</td>
+<td align="center">53.2</td>
+<td align="center">49.7</td>
+<td align="center">52.6</td>
+</tr>
+<tr>
+<td align="center">4conv + GCE</td>
+<td align="center">52.8</td>
+<td align="center">54.9</td>
+<td align="center">50.5</td>
+<td align="center">54.2</td>
+</tr>
+<tr>
+<td align="center">GCE + 4conv (PBD)</td>
+<td align="center">53.5</td>
+<td align="center">58.5</td>
+<td align="center">51.7</td>
+<td align="center">56.5</td>
+</tr>
+<tr>
+<td align="center">4conv + GCE + 4conv</td>
+<td align="center">53.1</td>
+<td align="center">58.8</td>
+<td align="center">51.6</td>
+<td align="center">56.7</td>
+</tr>
+</tbody>
+</table><p>注：基准实验采用<a class="reference external" href="https://arxiv.org/abs/1703.06870">Mask R-CNN</a>的网络结构，所有退化实验的卷积均使用大小为3的卷积核。</p>
+<ul class="simple">
+<li><p>Parsing R-CNN还使用了区域分离采样（Proposals Separation Sampling，PSS）与扩大区域特征图分辨率（Enlarging RoI Resolution，ERR）的方法来提升建议区域特征图的分辨率，为Parsing R-CNN提升性能。</p></li>
+</ul>
+</section>
+<section id="psserr">
+<h2>七、PSS与ERR<a class="headerlink" href="#psserr" title="永久链接至标题"></a></h2>
+<p>在目标检测任务中，FPN被用来从不同分辨率的特征图上提取RoI，但人体部位分析任务类似于图像分割，需要较大分辨率的RoI特征图来保留人体部位比较详细的细节信息，分辨率过小的特征图不具备这些信息。</p>
+<p>PSS即人体部位分析分支只在FPN中4倍下采样的特征图上对RoI进行RoIAlign，保证RoI特征图具有较充分的细节信息。</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">boxAP</th>
+<th align="center">mIoU</th>
+<th align="center">AP@50</th>
+<th align="center">AP@vol</th>
+<th align="center">PCP@50</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">baseline</td>
+<td align="center">67.7</td>
+<td align="center">47.2</td>
+<td align="center">41.4</td>
+<td align="center">45.4</td>
+<td align="center">44.3</td>
+</tr>
+<tr>
+<td align="center">P2 only</td>
+<td align="center">66.4</td>
+<td align="center">47.7</td>
+<td align="center">42.6</td>
+<td align="center">45.8</td>
+<td align="center">45.1</td>
+</tr>
+<tr>
+<td align="center">PSS</td>
+<td align="center">67.5</td>
+<td align="center">48.2</td>
+<td align="center">42.9</td>
+<td align="center">46.0</td>
+<td align="center">45.5</td>
+</tr>
+</tbody>
+</table><p>ERR将RoIAlign输出的14x14像素的区域特征图扩大到32x32像素，进一步丰富分割所需的细节信息，但随着RoI特征图分辨率的增大，网络的计算速度随之下降，由此可见做好精度与速度的平衡在算法研究与实际应用中都很重要。</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">fps</th>
+<th align="center">mIoU</th>
+<th align="center">AP@50</th>
+<th align="center">AP@vol</th>
+<th align="center">PCP@50</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">baseline (14×14)</td>
+<td align="center">10.4</td>
+<td align="center">48.2</td>
+<td align="center">42.9</td>
+<td align="center">46.0</td>
+<td align="center">45.5</td>
+</tr>
+<tr>
+<td align="center">ERR (32×32)</td>
+<td align="center">9.1</td>
+<td align="center">50.7</td>
+<td align="center">47.9</td>
+<td align="center">47.6</td>
+<td align="center">49.7</td>
+</tr>
+<tr>
+<td align="center">ERR (32×32)，100 RoIs</td>
+<td align="center">11.5</td>
+<td align="center">50.5</td>
+<td align="center">47.5</td>
+<td align="center">47.3</td>
+<td align="center">49.0</td>
+</tr>
+<tr>
+<td align="center">ERR (64×64)</td>
+<td align="center">5.6</td>
+<td align="center">51.5</td>
+<td align="center">49.0</td>
+<td align="center">47.9</td>
+<td align="center">50.8</td>
+</tr>
+</tbody>
+</table></section>
+<section id="id4">
+<h2>八、训练<a class="headerlink" href="#id4" title="永久链接至标题"></a></h2>
+<p>完成了数据加载以及模型构建之后，我们需要在开始训练之前选择模型的优化策略，遵循Mask R-CNN的设置，在批次大小为16的情况下，设置初始学习率为0.02，训练45000次迭代，组合使用了学习率预热与阶段下降策略，分别在30000与40000次迭代时将学习率减小十倍。</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Train</span>
+<span class="n">logging_rank</span><span class="p">(</span><span class="s1">&#39;Training starts !&#39;</span><span class="p">,</span> <span class="n">distributed</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">distributed</span><span class="p">,</span> <span class="n">local_rank</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">local_rank</span><span class="p">)</span>
+<span class="n">train</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">train_loader</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">scheduler</span><span class="p">,</span> <span class="n">checkpointer</span><span class="p">,</span> <span class="n">logger</span><span class="p">)</span>
+<span class="n">logging_rank</span><span class="p">(</span><span class="s1">&#39;Training done !&#39;</span><span class="p">,</span> <span class="n">distributed</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">distributed</span><span class="p">,</span> <span class="n">local_rank</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">local_rank</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>在训练过程中，日志记录仪会在每若干次迭代后记录当前网络训练的迭代数、各项损失数值等训练信息，检查点组件会定期保存网络模型到配置系统中<code class="docutils literal notranslate"><span class="pre">cfg.CKPT</span></code>所设置的路径下。</p>
+<p>根据<code class="docutils literal notranslate"><span class="pre">cfg.DISPLAY_ITER</span></code>设置的日志记录间隔，在训练过程中每经过20次迭代，日志记录仪会在终端中记录模型的训练状态。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">Training</span><span class="p">][</span><span class="n">e2e_parsing_rcnn_R</span><span class="o">-</span><span class="mi">50</span><span class="o">-</span><span class="n">FPN</span><span class="o">-</span><span class="n">PSS</span><span class="o">-</span><span class="n">ERR</span><span class="o">-</span><span class="n">ASPPV3</span><span class="o">-</span><span class="n">PBD_1x_ms</span><span class="o">.</span><span class="n">yaml</span><span class="p">][</span><span class="nb">iter</span><span class="p">:</span> <span class="mi">200</span><span class="o">/</span><span class="mi">45000</span><span class="p">][</span><span class="n">lr</span><span class="p">:</span> <span class="mf">0.009200</span><span class="p">][</span><span class="n">eta</span><span class="p">:</span> <span class="mi">21</span><span class="p">:</span><span class="mi">23</span><span class="p">:</span><span class="mi">30</span><span class="p">]</span>
+	  <span class="n">total_loss</span><span class="p">:</span> <span class="mf">1.690106</span> <span class="p">(</span><span class="mf">1.417845</span><span class="p">),</span> <span class="n">iter_time</span><span class="p">:</span> <span class="mf">1.8643</span> <span class="p">(</span><span class="mf">1.7190</span><span class="p">),</span> <span class="n">data_time</span><span class="p">:</span> <span class="mf">0.1549</span> <span class="p">(</span><span class="mf">0.1443</span><span class="p">)</span>
+	  <span class="n">loss_parsing</span><span class="p">:</span> <span class="mf">0.395894</span> <span class="p">(</span><span class="mf">0.365891</span><span class="p">),</span> <span class="n">loss_objectness</span><span class="p">:</span> <span class="mf">0.252050</span> <span class="p">(</span><span class="mf">0.210352</span><span class="p">),</span> <span class="n">loss_classifier</span><span class="p">:</span> <span class="mf">0.161344</span> <span class="p">(</span><span class="mf">0.199260</span><span class="p">),</span> <span class="n">loss_box_reg</span><span class="p">:</span> <span class="mf">0.228464</span> <span class="p">(</span><span class="mf">0.202087</span><span class="p">),</span> <span class="n">loss_rpn_box_reg</span><span class="p">:</span> <span class="mf">0.431002</span> <span class="p">(</span><span class="mf">0.427271</span><span class="p">)</span>
+<span class="p">[</span><span class="n">Training</span><span class="p">][</span><span class="n">e2e_parsing_rcnn_R</span><span class="o">-</span><span class="mi">50</span><span class="o">-</span><span class="n">FPN</span><span class="o">-</span><span class="n">PSS</span><span class="o">-</span><span class="n">ERR</span><span class="o">-</span><span class="n">ASPPV3</span><span class="o">-</span><span class="n">PBD_1x_ms</span><span class="o">.</span><span class="n">yaml</span><span class="p">][</span><span class="nb">iter</span><span class="p">:</span> <span class="mi">220</span><span class="o">/</span><span class="mi">45000</span><span class="p">][</span><span class="n">lr</span><span class="p">:</span> <span class="mf">0.009920</span><span class="p">][</span><span class="n">eta</span><span class="p">:</span> <span class="mi">21</span><span class="p">:</span><span class="mi">29</span><span class="p">:</span><span class="mi">40</span><span class="p">]</span>
+	  <span class="n">total_loss</span><span class="p">:</span> <span class="mf">1.188639</span> <span class="p">(</span><span class="mf">1.316550</span><span class="p">),</span> <span class="n">iter_time</span><span class="p">:</span> <span class="mf">2.0313</span> <span class="p">(</span><span class="mf">1.7280</span><span class="p">),</span> <span class="n">data_time</span><span class="p">:</span> <span class="mf">0.1353</span> <span class="p">(</span><span class="mf">0.1444</span><span class="p">)</span>
+	  <span class="n">loss_parsing</span><span class="p">:</span> <span class="mf">0.395576</span> <span class="p">(</span><span class="mf">0.342062</span><span class="p">),</span> <span class="n">loss_objectness</span><span class="p">:</span> <span class="mf">0.205645</span> <span class="p">(</span><span class="mf">0.191415</span><span class="p">),</span> <span class="n">loss_classifier</span><span class="p">:</span> <span class="mf">0.199962</span> <span class="p">(</span><span class="mf">0.190168</span><span class="p">),</span> <span class="n">loss_box_reg</span><span class="p">:</span> <span class="mf">0.156144</span> <span class="p">(</span><span class="mf">0.187377</span><span class="p">),</span> <span class="n">loss_rpn_box_reg</span><span class="p">:</span> <span class="mf">0.411209</span> <span class="p">(</span><span class="mf">0.438963</span><span class="p">)</span>
+<span class="p">[</span><span class="n">Training</span><span class="p">][</span><span class="n">e2e_parsing_rcnn_R</span><span class="o">-</span><span class="mi">50</span><span class="o">-</span><span class="n">FPN</span><span class="o">-</span><span class="n">PSS</span><span class="o">-</span><span class="n">ERR</span><span class="o">-</span><span class="n">ASPPV3</span><span class="o">-</span><span class="n">PBD_1x_ms</span><span class="o">.</span><span class="n">yaml</span><span class="p">][</span><span class="nb">iter</span><span class="p">:</span> <span class="mi">240</span><span class="o">/</span><span class="mi">45000</span><span class="p">][</span><span class="n">lr</span><span class="p">:</span> <span class="mf">0.010640</span><span class="p">][</span><span class="n">eta</span><span class="p">:</span> <span class="mi">21</span><span class="p">:</span><span class="mi">37</span><span class="p">:</span><span class="mi">11</span><span class="p">]</span>
+	  <span class="n">total_loss</span><span class="p">:</span> <span class="mf">1.737057</span> <span class="p">(</span><span class="mf">1.387051</span><span class="p">),</span> <span class="n">iter_time</span><span class="p">:</span> <span class="mf">1.8072</span> <span class="p">(</span><span class="mf">1.7389</span><span class="p">),</span> <span class="n">data_time</span><span class="p">:</span> <span class="mf">0.1581</span> <span class="p">(</span><span class="mf">0.1447</span><span class="p">)</span>
+	  <span class="n">loss_parsing</span><span class="p">:</span> <span class="mf">0.347431</span> <span class="p">(</span><span class="mf">0.351932</span><span class="p">),</span> <span class="n">loss_objectness</span><span class="p">:</span> <span class="mf">0.299453</span> <span class="p">(</span><span class="mf">0.190103</span><span class="p">),</span> <span class="n">loss_classifier</span><span class="p">:</span> <span class="mf">0.196695</span> <span class="p">(</span><span class="mf">0.190588</span><span class="p">),</span> <span class="n">loss_box_reg</span><span class="p">:</span> <span class="mf">0.149391</span> <span class="p">(</span><span class="mf">0.185793</span><span class="p">),</span> <span class="n">loss_rpn_box_reg</span><span class="p">:</span> <span class="mf">0.479773</span> <span class="p">(</span><span class="mf">0.427392</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="id5">
+<h2>九、测试<a class="headerlink" href="#id5" title="永久链接至标题"></a></h2>
+<p>在完成Parsing R-CNN模型的训练之后，我们使用<code class="docutils literal notranslate"><span class="pre">$Pet/tools/vision/test_net.py</span></code>在<code class="docutils literal notranslate"><span class="pre">CIHP_val</span></code>上评估模型的精度。同样需需要使用<code class="docutils literal notranslate"><span class="pre">Dataloader</span></code>来加载测试数据集，将图像的短边缩放到800像素，长边做同样尺度的缩放（长边最大1333像素）。</p>
+<p>通过加载训练最大迭代数之后的模型<code class="docutils literal notranslate"><span class="pre">$Pet/ckpts/vision/CIHP/e2e_parsing_rcnn_R-50-FPN-PSS-ERR-ASPPV3-PBD_1x_ms/model_latest.pth</span></code>，执行下面的命令进行Parsing R-CNN模型的测试，测试日志同样会被<code class="docutils literal notranslate"><span class="pre">Logger</span></code>所记录。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cd $Pet
+
+CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python tools/rcnn/test_net.py --cfg cfgs/rcnn/CIHP/e2e_parsing_rcnn_R-50-FPN-PSS-ERR-ASPPV3-PBD_1x_ms.yaml
+</pre></div>
+</div>
+</section>
+<section id="id6">
+<h2>十、人体部位分析任务的评价指标<a class="headerlink" href="#id6" title="永久链接至标题"></a></h2>
+<p>在人体部位分析任务中，模型精度使用<a class="reference external" href="https://arxiv.org/pdf/1705.07206">MHP-v1</a>[6]中提出的mIOU、APp（AP&#64;50）、APP、vol（AP&#64;vol)与PCP来评价模型精度。</p>
+<p>平均交并比（mean Intersection Over Union，mIOU），在一张图片中所有人体部位类别的预测掩码与标注掩码的像素交并比的平均值。</p>
+<p>基于人体部位的平均准确率(Average Precision based on Part，APp)，与实例分割任务基于整个区域的平均准确率不同，APp使用的是一个人体实例内不同部位的预测掩码与标注掩码之间的mIOU来判断一个预测的实例是否正确，AP&#64;50代表当mIOU的阈值为0.5时的APp，AP&#64;vol代表mIOU的阈值分别为0.1~0.9（间隔为0.1）时APp的平均值。</p>
+<p>正确分析的人体部位百分比（Percentage of Correctly Parsed Body Parts，PCP)，APp将所有人体部位的准确率进行了均值计算，不能真正反映有多少人体部位被正确的预测。因此在每一个人物实例中，所有与标注掩码的像素IOU高于一定阈值的人体部位被认为是被正确预测，每一个人物实例计算一个PCP，整体的PCP是有所有人物实例的PCP的平均值。PCP&#64;50代表IOU的阈值为0.5时的PCP。</p>
+</section>
+<section id="id7">
+<h2>参考文献<a class="headerlink" href="#id7" title="永久链接至标题"></a></h2>
+<p>[1] Lu Yang, Qing Song, Zhihui Wang and Ming Jiang. Parsing R-CNN for Instance-Level Human Analysis. CVPR 2019.</p>
+<p>[2] K. Gong, X. Liang, Y. Li, Y. Chen, and L. Lin. Instance-level human parsing via part grouping network. ECCV 2018.</p>
+<p>[3] Xiaolong Wang, Ross Girshick, Abhinav Gupta1, and Kaiming He. Non-localneural networks. CVPR 2018.</p>
+<p>[4] Liang-Chieh Chen, George Papandreou, Florian Schroff, Hartwig Adam. Rethinking Atrous Convolution for Semantic Image Segmentation. arXiv:1706.05587.</p>
+<p>[5] Kaiming He, Georgia Gkioxari, Piotr Dollár, Ross Girshick. Mask R-CNN. ICCV 2017.</p>
+<p>[6] Jianshu Li, Jian Zhao, Yunchao Wei, Congyan Lang, Yidong Li, Terence Sim, Shuicheng Yan, Jiashi Feng. Multi-human parsing in the wild. arXiv:1705.07206, 2017.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="det_zh.html" class="btn btn-neutral float-left" title="在MSCOCO2017数据集上训练Faster R-CNN模型" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../customer/new_backbone_zh.html" class="btn btn-neutral float-right" title="添加新的模块" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2018-2021, BUPT_PRIV.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

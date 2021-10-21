@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>在ADE20K数据集上训练resnet50+PSP模型 &mdash; Pet-doc 0.7.0 文档</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/translations.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜索" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> Pet-doc
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">开始你的第一步</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview/about_pet_zh.html">关于Pet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview/why_pet_zh.html">为什么选择Pet？</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview/install_zh.html">Pet安装</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview/quick_start.html">快速开始</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">使用教程</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage/configs_zh.html">配置系统</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage/hook_zh.html">Hook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage/data_zh.html">数据加载教程</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage/solver_zh.html">迭代优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage/model_building_zh.html">模型构建</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage/training_zh.html">训练教程</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage/evaluation_zh.html">评估教程</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">应用实践</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/basic/cls_zh.html">在ImageNet数据集上训练分类模型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/basic/semseg_zh.html">在ADE20K数据集上训练resnet50+PSP模型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/basic/det_zh.html">在MSCOCO2017数据集上训练Faster R-CNN模型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/basic/parsing_zh.html">Parsing教程/Parsing R-CNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/customer/new_backbone_zh.html">添加新的模块</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/customer/new_dataset_zh.html">添加自定义数据集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/core/pr_zh.html">扩展</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/core/issue_zh.html">Pet问题反馈</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">语言切换</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../switch_language.html"><a href='https://mmdetection.readthedocs.io/en/latest/'>English</a></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../switch_language.html#a-href-https-mmdetection-readthedocs-io-zh-cn-latest-a"><a href='https://mmdetection.readthedocs.io/zh_CN/latest/'>简体中文</a></a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">接口文档（英文）</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Pet-doc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>在ADE20K数据集上训练resnet50+PSP模型</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/docs/tutorials/basic/semseg_zh.md.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ade20kresnet50-psp">
+<h1>在ADE20K数据集上训练resnet50+PSP模型<a class="headerlink" href="#ade20kresnet50-psp" title="永久链接至标题"></a></h1>
+<section id="id1">
+<h2>一、介绍<a class="headerlink" href="#id1" title="永久链接至标题"></a></h2>
+<p>本教程将介绍使用Pet训练以及测试resnet50+PSP模型进行语义分割的主要步骤，在此我们会指导您如何通过组合Pet的提供的组件来训练resnet50+PSP模型，在此我们仅讲解组件的调用，部分实现细节请查阅系统组件的相应部分。</p>
+<p>在阅读本教程的之前我们强烈建议您阅读原始论文 <a class="reference external" href="https://arxiv.org/abs/1512.03385">Deep Residual Learning for Image Recognition</a>[1]、<a class="reference external" href="https://arxiv.org/abs/1612.01105">Pyramid Scene Parsing Network</a>[2]以了解更多关于resnet50+PSP模型的算法原理。</p>
+</section>
+<section id="id2">
+<h2>二、快速开始<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<p>如果您已经有语义分割任务的训练经验，您可以直接在Pet中运行<code class="docutils literal notranslate"><span class="pre">$Pet/tools/vision/train_net.py</span></code>脚本开始训练您的resnet50+PSP模型。</p>
+</section>
+<section id="id3">
+<h2>三、用法示例<a class="headerlink" href="#id3" title="永久链接至标题"></a></h2>
+<ul class="simple">
+<li><p><strong>训练</strong></p></li>
+</ul>
+<p>直接在Pet中运行以下代码开始训练您的模型</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cd $Pet
+
+Python tools/vision/test_net.py --cfg cfgs/vision/ADE20K/pspnet/PSPNet_R-50c_1x.yaml
+
+# 指定GPU参数进行训练
+cd $Pet
+
+Python tools/vision/test_net.py --cfg cfgs/vision/ADE20K/pspnet/PSPNet_R-50c_1x.yaml --gpu_id 0,1,2,3
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>测试</strong></p></li>
+</ul>
+<p>在Pet中运行以下代码开始测试您的模型</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>#默认为8GPU进行训练
+cd $Pet
+
+python tools/vision/train_net.py --cfg cfgs/vision/ADE20K/pspnet/PSPNet_R-50c_1x/PSPNet_R-50c_1x.yaml
+
+# 指定GPU参数进行训练
+cd $Pet
+
+python tools/vision/train_net.py --cfg cfgs/vision/ADE20K/pspnet/PSPNet_R-50c_1x.yaml --gpu_id 0,1,2,3
+</pre></div>
+</div>
+</section>
+<section id="id4">
+<h2>四、构建实验配置文件<a class="headerlink" href="#id4" title="永久链接至标题"></a></h2>
+<p>在进行任何与模型训练和测试有关的操作之前，需要指定一个yaml文件，明确在训练时对数据集、模型结构、优化策略以及训练时可以调节的重要参数的设置，包括学习率，GPU数量、网络结构、数据迭代次数等。本教程以<code class="docutils literal notranslate"><span class="pre">$Pet/cfgs/vision/ADE20K/pspnet/PSPNet_R-50c_1x.yaml</span></code>模型为例讲解训练过程中所需要的关键配置，这套配置将指导resnet50+PSPnet模型以及测试的全部步骤与细节，全部参数设置详见<code class="docutils literal notranslate"><span class="pre">$Pet/cfgs/vision/ADE20K/pspnet/PSPNet_R-50c_1x.yaml</span></code></p>
+<p>Pet以yaml文件格式定义并存储本次实验配置信息，并根据任务类型和所用数据集等信息将其保存在cfgs目录下相应位置。以<code class="docutils literal notranslate"><span class="pre">cfgs/vision/ADE20K/pspnet/PSPNet_R-50c_1x/PSPNet_R-50c_1x.yaml</span></code>为例，其包含的大致配置信息如下（所有默认基础配置可在pet/lib/config/目录下查询）</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">MISC</span><span class="p">:</span><span class="c1"># 基础配置</span>
+    <span class="o">...</span>
+<span class="n">MODEL</span><span class="p">:</span><span class="c1"># 模型配置</span>
+    <span class="o">...</span>
+<span class="n">SOLVER</span><span class="p">:</span><span class="c1"># 优化器及调度器配置</span>
+    <span class="o">...</span>
+<span class="n">DATA</span><span class="p">:</span><span class="c1"># 数据相关配置</span>
+    <span class="o">...</span>
+<span class="n">TRAIN</span><span class="p">:</span><span class="c1"># 训练配置</span>
+    <span class="o">...</span>
+<span class="n">TEST</span><span class="p">:</span><span class="c1"># 测试配置</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+</section>
+<section id="id5">
+<h2>五、数据集准备与介绍<a class="headerlink" href="#id5" title="永久链接至标题"></a></h2>
+<p>确保ADE20K数据集已经存放在您的硬盘中并整理好文件结构。</p>
+<p><a class="reference external" href="http://groups.csail.mit.edu/vision/datasets/ADE20K/">ADE20K</a>[3]是一个场景解析数据集，该数据集包含27611幅图片，这些图像用开放字典标签集密集注释，并附有150个类别对象的标注信息。对于2017 Places Challenge 2，选择了覆盖89％所有像素的100个thing和50个stuff类别。</p>
+<p>数据集组成</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>Database</th>
+<th>Number</th>
+<th>illustration</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Training Set</td>
+<td>25547 images</td>
+<td>All images are fully annotated with objects and, many of the images have parts too.</td>
+</tr>
+<tr>
+<td>Validation Set</td>
+<td>2000 images</td>
+<td>Fully annotated with objects and parts</td>
+</tr>
+<tr>
+<td>Test Set</td>
+<td>\</td>
+<td>Images to be released later.</td>
+</tr>
+<tr>
+<td>Consistency set</td>
+<td>64 images</td>
+<td>64 images and annotations used for checking the annotation consistency</td>
+</tr>
+</tbody>
+</table></section>
+<section id="id6">
+<h2>六、数据加载<a class="headerlink" href="#id6" title="永久链接至标题"></a></h2>
+<p>在您的硬盘准备好ADE20K数据集，文件夹结构如下</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ADE20K</span>
+	<span class="o">|--</span><span class="n">images</span>
+		<span class="o">|--</span><span class="n">testing</span>
+		<span class="o">|--</span><span class="n">training</span>
+		<span class="o">|--</span><span class="n">validation</span>
+		<span class="o">...</span>
+	<span class="o">|--</span><span class="n">annotations</span>
+		<span class="o">|--</span><span class="n">training</span>
+		<span class="o">|--</span><span class="n">validation</span>
+		<span class="o">|--</span><span class="n">visualization</span>
+		<span class="o">...</span>
+</pre></div>
+</div>
+<p>预训练模型权重/测试模型权重下载</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">从MOdel</span> <span class="n">Zoo中下载所需要的权重文件到</span><span class="s2">&quot;/ckpts/&quot;</span><span class="n">相应目录下</span>
+</pre></div>
+</div>
+<p>yaml文件中关于数据集部分的配置如下</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">DATA</span><span class="p">:</span>
+  <span class="n">PIXEL_MEAN</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.485</span><span class="p">,</span> <span class="mf">0.456</span><span class="p">,</span> <span class="mf">0.406</span><span class="p">)</span><span class="c1"># 像素平均值（BGR顺序）作为元组</span>
+  <span class="n">PIXEL_STD</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.229</span><span class="p">,</span> <span class="mf">0.224</span><span class="p">,</span> <span class="mf">0.225</span><span class="p">)</span><span class="c1"># 像素标准差（BGR顺序）作为元组</span>
+</pre></div>
+</div>
+<p>根据配置文件构建训练数据集和加载器,核心调用<code class="docutils literal notranslate"><span class="pre">/pet/vision/datasets/dataset.py</span></code>下的<code class="docutils literal notranslate"><span class="pre">build_dataset</span></code>和<code class="docutils literal notranslate"><span class="pre">make_{train/test}_data_loader</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pet.vision.datasets.dataset</span> <span class="kn">import</span> <span class="n">build_dataset</span><span class="p">,</span> <span class="n">make_train_data_loader</span>
+<span class="kn">from</span> <span class="nn">pet.vision.datasets.dataset</span> <span class="kn">import</span> <span class="n">build_dataset</span><span class="p">,</span> <span class="n">make_test_data_loader</span>
+
+<span class="c1"># 构建训练数据集和加载器</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">build_dataset</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">is_train</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">start_iter</span> <span class="o">=</span> <span class="n">checkpointer</span><span class="o">.</span><span class="n">checkpoint</span><span class="p">[</span><span class="s1">&#39;scheduler&#39;</span><span class="p">][</span><span class="s1">&#39;iteration&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">checkpointer</span><span class="o">.</span><span class="n">resume</span> <span class="k">else</span> <span class="mi">1</span>
+<span class="n">train_loader</span> <span class="o">=</span> <span class="n">make_train_data_loader</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">start_iter</span><span class="o">=</span><span class="n">start_iter</span><span class="p">)</span>
+<span class="o">...</span>
+<span class="c1"># 构建测试数据集和加载器</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">build_dataset</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">is_train</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">test_loader</span> <span class="o">=</span> <span class="n">make_test_data_loader</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">dataset</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="id7">
+<h2>七、从配置文件中进行模型构建<a class="headerlink" href="#id7" title="永久链接至标题"></a></h2>
+<p>以<code class="docutils literal notranslate"><span class="pre">$Pet/cfgs/vision/ADE20K/pspnet/PSPNet_R-50c_1x.yaml</span></code>为例，其包含了基础配置、模型配置等基本配置信息。</p>
+<p>关于使用模型的详细配置解释参见<code class="docutils literal notranslate"><span class="pre">$Pet/lib/config/model/backbone.py</span></code></p>
+<p>resnet50+PSP模型构建的配置信息如下</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">MISC</span><span class="p">:</span><span class="c1"># 基础配置</span>
+  <span class="n">CKPT</span><span class="p">:</span> <span class="s2">&quot;ckpts/vision/ADE20K/pspnet/PSPNet_R-50c_1x&quot;</span><span class="c1">#权重文件路径</span>
+<span class="n">MODEL</span><span class="p">:</span><span class="c1"># 模型配置</span>
+  <span class="n">BACKBONE</span><span class="p">:</span> <span class="s2">&quot;resnet&quot;</span><span class="c1"># 骨干网络配置</span>
+  <span class="n">NECK</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
+  <span class="n">GLOBAL_HEAD</span><span class="p">:</span><span class="c1"># 任务配置，本实验为语义分割，对应SEMSEG</span>
+    <span class="n">SEMSEG</span><span class="p">:</span>
+      <span class="n">AUXSEG_ON</span><span class="p">:</span> <span class="kc">True</span>
+      <span class="n">PSPNET_ON</span><span class="p">:</span> <span class="kc">True</span>
+  <span class="n">RESNET</span><span class="p">:</span><span class="c1"># 骨干网络resnet的结构设计</span>
+    <span class="n">LAYERS</span><span class="p">:</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="c1"># 每一模块的层数，此处的参数设置为resnet50</span>
+    <span class="n">STRIDE_3X3</span><span class="p">:</span> <span class="kc">True</span>
+    <span class="n">USE_3x3x3HEAD</span><span class="p">:</span> <span class="kc">True</span>
+    <span class="n">NORM</span><span class="p">:</span> <span class="s2">&quot;SyncBN&quot;</span>
+    <span class="n">STRIDE</span><span class="p">:</span> <span class="mi">8</span>
+    <span class="n">FREEZE_AT</span><span class="p">:</span> <span class="mi">0</span>
+  <span class="n">AUXSEG</span><span class="p">:</span><span class="c1"># GLOBAL_HEAD的AUXSEGMoudle的构建参数</span>
+    <span class="n">CONV_DIM</span><span class="p">:</span> <span class="mi">1024</span>
+    <span class="n">NORM</span><span class="p">:</span> <span class="s2">&quot;SyncBN&quot;</span>
+    <span class="n">NUM_CLASSES</span><span class="p">:</span> <span class="mi">150</span>
+    <span class="n">IGNORE_LABEL</span><span class="p">:</span> <span class="mi">255</span>
+    <span class="n">LABEL_DOWN_SAMPLE_RATE</span><span class="p">:</span> <span class="mi">1</span>
+    <span class="n">LOSS_WEIGHT</span><span class="p">:</span> <span class="mf">0.4</span>
+  <span class="n">PSPNET</span><span class="p">:</span><span class="c1"># GLOBAL_HEAD的PSPMoudle的构建参数</span>
+    <span class="n">NORM</span><span class="p">:</span> <span class="s2">&quot;SyncBN&quot;</span>
+    <span class="n">NUM_CLASSES</span><span class="p">:</span> <span class="mi">150</span>
+    <span class="n">IGNORE_LABEL</span><span class="p">:</span> <span class="mi">255</span>
+    <span class="n">LABEL_DOWN_SAMPLE_RATE</span><span class="p">:</span> <span class="mi">1</span>
+    <span class="n">LOSS_WEIGHT</span><span class="p">:</span> <span class="mf">1.0</span>
+</pre></div>
+</div>
+<p>根据yaml配置文件，通过GeneralizedCNN类实例化对应模型，在forward函数中按顺序控制数据传输。具体代码在<code class="docutils literal notranslate"><span class="pre">/pet/vision/modeling/model_builder.py</span></code>中：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pet.vision.modeling.model_builder</span> <span class="kn">import</span> <span class="n">GeneralizedCNN</span>
+
+<span class="k">class</span> <span class="nc">GeneralizedCNN</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    
+        <span class="sd">&quot;&quot;&quot; 视觉模型构建+前向函数定义    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="n">CfgNode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">GeneralizedCNN</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span> <span class="o">=</span> <span class="n">cfg</span>
+        <span class="c1"># 构建backbone部分：ResNet</span>
+        <span class="n">Backbone</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">BACKBONES</span><span class="p">[</span><span class="n">cfg</span><span class="o">.</span><span class="n">MODEL</span><span class="o">.</span><span class="n">BACKBONE</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">backbone</span> <span class="o">=</span> <span class="n">Backbone</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span> 
+        <span class="o">...</span>
+        <span class="c1"># Neck为&quot;&quot;，无需构建此部分</span>
+        <span class="k">if</span> <span class="n">cfg</span><span class="o">.</span><span class="n">MODEL</span><span class="o">.</span><span class="n">NECK</span><span class="p">:</span> 
+            <span class="n">Neck</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">NECKS</span><span class="p">[</span><span class="n">cfg</span><span class="o">.</span><span class="n">MODEL</span><span class="o">.</span><span class="n">NECK</span><span class="p">]</span>
+            <span class="o">...</span>
+        <span class="o">...</span>
+        <span class="c1"># 构建semseg的检测头</span>
+        <span class="k">if</span> <span class="n">cfg</span><span class="o">.</span><span class="n">MODEL</span><span class="o">.</span><span class="n">GLOBAL_HEAD</span><span class="o">.</span><span class="n">SEMSEG_ON</span><span class="p">:</span><span class="c1"># cfg.infer_cfg()调用</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">global_semseg</span> <span class="o">=</span> <span class="n">GlobalSemSeg</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">dim_in</span><span class="p">,</span> <span class="n">spatial_in</span><span class="p">)</span>
+        <span class="o">...</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+</section>
+<section id="id8">
+<h2>八、优化器与调度器的构建<a class="headerlink" href="#id8" title="永久链接至标题"></a></h2>
+<p>以<code class="docutils literal notranslate"><span class="pre">$Pet/cfgs/vision/ADE20K/pspnet/PSPNet_R-50c_1x.yaml</span></code>为例，在优化器中对基本学习率进行了设定，在调度器中设定了最大迭代次数、SGD迭代次数、调度器类型。</p>
+<p>关于优化器与调度器的构建详细配置解释参见<code class="docutils literal notranslate"><span class="pre">$Pet/lib/config/solver.py</span></code></p>
+<p>yaml文件中关于优化器与调度器的配置信息如下：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">SOLVER</span><span class="p">:</span>
+  <span class="n">OPTIMIZER</span><span class="p">:</span><span class="c1"># 优化器</span>
+    <span class="n">BASE_LR</span><span class="p">:</span> <span class="mf">0.01</span><span class="c1"># 基本学习率</span>
+  <span class="n">SCHEDULER</span><span class="p">:</span>
+    <span class="n">TOTAL_ITERS</span><span class="p">:</span> <span class="mi">151575</span>  <span class="c1"># 20210 * 120 / 16 = 151575，最大迭代次数</span>
+    <span class="n">WARM_UP_ITERS</span><span class="p">:</span> <span class="mi">0</span><span class="c1"># SGD迭代次数，预热到SOLVER.OPTIMIZER.BASE_LR</span>
+    <span class="n">POLICY</span><span class="p">:</span> <span class="s2">&quot;POLY&quot;</span><span class="c1"># 调度器类型，这里使用的是POLY，其他还有&quot;STEP&quot;, &quot;COSINE&quot;, ...</span>
+</pre></div>
+</div>
+<p>通过解析配置文件相关参数，传给<code class="docutils literal notranslate"><span class="pre">Optimizer</span></code>类(<code class="docutils literal notranslate"><span class="pre">/pet/lib/utils/analyser.py</span></code>)和<code class="docutils literal notranslate"><span class="pre">LearningRateScheduler</span></code>类(<code class="docutils literal notranslate"><span class="pre">/pet/lib/utils/lr_scheduler.py</span></code>),从而构建优化器及调度器，仅在训练阶段使用：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pet.lib.utils.optimizer</span> <span class="kn">import</span> <span class="n">Optimizer</span>
+<span class="kn">from</span> <span class="nn">pet.lib.utils.lr_scheduler</span> <span class="kn">import</span> <span class="n">LearningRateScheduler</span>
+
+<span class="c1"># 构建优化器</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">Optimizer</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">cfg</span><span class="o">.</span><span class="n">SOLVER</span><span class="o">.</span><span class="n">OPTIMIZER</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">checkpointer</span><span class="o">.</span><span class="n">load_optimizer</span><span class="p">(</span><span class="n">optimizer</span><span class="p">)</span>
+<span class="o">...</span>
+<span class="c1"># 构建调度器</span>
+<span class="n">scheduler</span> <span class="o">=</span> <span class="n">LearningRateScheduler</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="n">cfg</span><span class="o">.</span><span class="n">SOLVER</span><span class="p">,</span> <span class="n">iter_per_epoch</span><span class="o">=</span><span class="n">iter_per_epoch</span><span class="p">)</span>
+<span class="n">scheduler</span> <span class="o">=</span> <span class="n">checkpointer</span><span class="o">.</span><span class="n">load_scheduler</span><span class="p">(</span><span class="n">scheduler</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="id9">
+<h2>九、模型训练参数配置<a class="headerlink" href="#id9" title="永久链接至标题"></a></h2>
+<p>以<code class="docutils literal notranslate"><span class="pre">$Pet/cfgs/vision/ADE20K/pspnet/PSPNet_R-50c_1x.yaml</span></code>为例，模型主要的训练流程有指定权重文件路径、指定训练集、指定训练过程中需要用到的数据预处理参数、指定图像增强参数、指定随机裁剪参数等，在该yaml文件中对这部分参数进行了指定。</p>
+<p>关于训练部分的详细配置解释参见<code class="docutils literal notranslate"><span class="pre">$Pet/lib/config/data.py</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">TRAIN</span><span class="p">:</span><span class="c1"># 训练参数设定</span>
+  <span class="n">WEIGHTS</span><span class="p">:</span> <span class="s2">&quot;ckpts/vision/ImageNet/3rdparty/resnet/resnet50c_mmcv/resnet50_v1c-2cccc1ad-convert.pth&quot;</span><span class="c1"># 指定权重文件路径</span>
+  <span class="n">DATASETS</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;ade2017_sceneparsing_train&quot;</span><span class="p">,)</span><span class="c1">#指定训练集</span>
+  <span class="n">SIZE_DIVISIBILITY</span><span class="p">:</span> <span class="mi">8</span><span class="c1"># 指定每一个整理批次的分割数</span>
+  <span class="n">TRANSFORMS</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;color_jitter&quot;</span><span class="p">,</span> <span class="s2">&quot;resize&quot;</span><span class="p">,</span> <span class="s2">&quot;random_crop&quot;</span><span class="p">,</span> <span class="s2">&quot;random_horizontal_flip&quot;</span><span class="p">,</span> <span class="s2">&quot;to_tensor&quot;</span><span class="p">,</span> <span class="s2">&quot;normalize&quot;</span><span class="p">)</span><span class="c1"># 训练过程中需要用到的数据预处理参数</span>
+  <span class="n">COLOR_JITTER</span><span class="p">:</span><span class="c1"># 图像增强参数</span>
+    <span class="n">BRIGHTNESS</span><span class="p">:</span> <span class="mf">0.4</span>
+    <span class="n">CONTRAST</span><span class="p">:</span> <span class="mf">0.4</span>
+    <span class="n">SATURATION</span><span class="p">:</span> <span class="mf">0.4</span>
+    <span class="n">HUE</span><span class="p">:</span> <span class="mf">0.1</span>
+  <span class="n">RANDOM_CROP</span><span class="p">:</span><span class="c1"># 随机裁剪参数</span>
+    <span class="n">CROP_SCALES</span><span class="p">:</span> <span class="p">((</span><span class="mi">512</span><span class="p">,</span> <span class="mi">512</span><span class="p">),)</span><span class="c1"># 随机裁剪的比例，如果img_size&lt;scale，则使用PAD_像素填充间隙。(H, W)必须能被SIZE_DIVISIBILITY整除，默认为((640, 640),)</span>
+    <span class="n">CAT_MAX_THS</span><span class="p">:</span> <span class="mf">0.75</span><span class="c1"># 裁剪区域选择的CAT_MAX_THS</span>
+    <span class="n">IGNORE_LABEL</span><span class="p">:</span> <span class="mi">255</span><span class="c1"># 忽略cat max像素计算的标签</span>
+  <span class="n">RESIZE</span><span class="p">:</span>
+    <span class="n">SCALES_SAMPLING</span><span class="p">:</span> <span class="s2">&quot;scale_factor&quot;</span><span class="c1"># 训练期间最小最小尺寸的采样类型，这里使用的是&quot;scale_factor&quot;，其余还有&quot;choice&quot;, &quot;range&quot;, .</span>
+    <span class="n">SCALE_FACTOR</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">1.25</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mf">1.75</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>关于模型训练的主要步骤包括创建模型、创建检查点、加载预训练权重或随机初始化、创建优化器、创建训练集与加载器、构建调度器、模型分布式等。以下代码列出了部分训练步骤，详细参见<code class="docutils literal notranslate"><span class="pre">$pet/tools/vision/train_net.py</span></code>。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calculate Params &amp; FLOPs &amp; Activations</span>
+    <span class="n">n_params</span><span class="p">,</span> <span class="n">conv_flops</span><span class="p">,</span> <span class="n">model_flops</span><span class="p">,</span> <span class="n">conv_activs</span><span class="p">,</span> <span class="n">model_activs</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="n">is_main_process</span><span class="p">()</span> <span class="ow">and</span> <span class="n">cfg</span><span class="o">.</span><span class="n">ANALYSER</span><span class="o">.</span><span class="n">ENABLED</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">GeneralizedCNN</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+        <span class="n">analyser</span> <span class="o">=</span> <span class="n">RCNNAnalyser</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">param_details</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">n_params</span> <span class="o">=</span> <span class="n">analyser</span><span class="o">.</span><span class="n">get_params</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">conv_flops</span><span class="p">,</span> <span class="n">model_flops</span> <span class="o">=</span> <span class="n">analyser</span><span class="o">.</span><span class="n">get_flops_activs</span><span class="p">(</span><span class="n">cfg</span><span class="o">.</span><span class="n">TRAIN</span><span class="o">.</span><span class="n">RESIZE</span><span class="o">.</span><span class="n">SCALES</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cfg</span><span class="o">.</span><span class="n">TRAIN</span><span class="o">.</span><span class="n">RESIZE</span><span class="o">.</span><span class="n">MAX_SIZE</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;flops&quot;</span><span class="p">)</span>
+        <span class="n">conv_activs</span><span class="p">,</span> <span class="n">model_activs</span> <span class="o">=</span> <span class="n">analyser</span><span class="o">.</span><span class="n">get_flops_activs</span><span class="p">(</span><span class="n">cfg</span><span class="o">.</span><span class="n">TRAIN</span><span class="o">.</span><span class="n">RESIZE</span><span class="o">.</span><span class="n">SCALES</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cfg</span><span class="o">.</span><span class="n">TRAIN</span><span class="o">.</span><span class="n">RESIZE</span><span class="o">.</span><span class="n">MAX_SIZE</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;activations&quot;</span><span class="p">)</span>
+        <span class="k">del</span> <span class="n">model</span>
+    <span class="n">synchronize</span><span class="p">()</span>
+
+    <span class="c1"># Create model</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">GeneralizedCNN</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+    <span class="n">logging_rank</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+    <span class="n">logging_rank</span><span class="p">(</span>
+        <span class="s2">&quot;Params: </span><span class="si">{}</span><span class="s2"> | FLOPs: </span><span class="si">{:.4f}</span><span class="s2">M / Conv_FLOPs: </span><span class="si">{:.4f}</span><span class="s2">M | Activations: </span><span class="si">{:.4f}</span><span class="s2">M / Conv_Activations: </span><span class="si">{:.4f}</span><span class="s2">M&quot;</span>
+        <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n_params</span><span class="p">,</span> <span class="n">model_flops</span><span class="p">,</span> <span class="n">conv_flops</span><span class="p">,</span> <span class="n">model_activs</span><span class="p">,</span> <span class="n">conv_activs</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Create checkpointer</span>
+    <span class="n">checkpointer</span> <span class="o">=</span> <span class="n">CheckPointer</span><span class="p">(</span><span class="n">cfg</span><span class="o">.</span><span class="n">MISC</span><span class="o">.</span><span class="n">CKPT</span><span class="p">,</span> <span class="n">weights_path</span><span class="o">=</span><span class="n">cfg</span><span class="o">.</span><span class="n">TRAIN</span><span class="o">.</span><span class="n">WEIGHTS</span><span class="p">,</span> <span class="n">auto_resume</span><span class="o">=</span><span class="n">cfg</span><span class="o">.</span><span class="n">TRAIN</span><span class="o">.</span><span class="n">AUTO_RESUME</span><span class="p">)</span>
+
+    <span class="c1"># Load pre-trained weights or random initialization</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">checkpointer</span><span class="o">.</span><span class="n">load_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">convert_conv1</span><span class="o">=</span><span class="n">cfg</span><span class="o">.</span><span class="n">MISC</span><span class="o">.</span><span class="n">CONV1_RGB2BGR</span><span class="p">)</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="n">cfg</span><span class="o">.</span><span class="n">MISC</span><span class="o">.</span><span class="n">DEVICE</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">cfg</span><span class="o">.</span><span class="n">MISC</span><span class="o">.</span><span class="n">DEVICE</span> <span class="o">==</span> <span class="s2">&quot;cuda&quot;</span> <span class="ow">and</span> <span class="n">cfg</span><span class="o">.</span><span class="n">MISC</span><span class="o">.</span><span class="n">CUDNN</span><span class="p">:</span>
+        <span class="n">cudnn</span><span class="o">.</span><span class="n">benchmark</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">cudnn</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="c1"># Create optimizer</span>
+    <span class="n">optimizer</span> <span class="o">=</span> <span class="n">Optimizer</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">cfg</span><span class="o">.</span><span class="n">SOLVER</span><span class="o">.</span><span class="n">OPTIMIZER</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+    <span class="n">optimizer</span> <span class="o">=</span> <span class="n">checkpointer</span><span class="o">.</span><span class="n">load_optimizer</span><span class="p">(</span><span class="n">optimizer</span><span class="p">)</span>
+    <span class="n">logging_rank</span><span class="p">(</span><span class="s2">&quot;The mismatch keys: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mismatch_params_filter</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">checkpointer</span><span class="o">.</span><span class="n">mismatch_keys</span><span class="p">))))</span>
+
+    <span class="c1"># Create training dataset and loader</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">build_dataset</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">is_train</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">start_iter</span> <span class="o">=</span> <span class="n">checkpointer</span><span class="o">.</span><span class="n">checkpoint</span><span class="p">[</span><span class="s1">&#39;scheduler&#39;</span><span class="p">][</span><span class="s1">&#39;iteration&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">checkpointer</span><span class="o">.</span><span class="n">resume</span> <span class="k">else</span> <span class="mi">1</span>
+    <span class="n">train_loader</span> <span class="o">=</span> <span class="n">make_train_data_loader</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">start_iter</span><span class="o">=</span><span class="n">start_iter</span><span class="p">)</span>
+    <span class="n">max_iter</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">train_loader</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">cfg</span><span class="o">.</span><span class="n">SOLVER</span><span class="o">.</span><span class="n">SCHEDULER</span><span class="o">.</span><span class="n">TOTAL_EPOCHS</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">iter_per_epoch</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">iter_per_epoch</span> <span class="o">=</span> <span class="n">max_iter</span> <span class="o">//</span> <span class="n">cfg</span><span class="o">.</span><span class="n">SOLVER</span><span class="o">.</span><span class="n">SCHEDULER</span><span class="o">.</span><span class="n">TOTAL_EPOCHS</span>
+
+    <span class="c1"># Some methods need to know present iter</span>
+    <span class="n">cfg</span><span class="o">.</span><span class="n">defrost</span><span class="p">()</span>
+    <span class="n">cfg</span><span class="o">.</span><span class="n">SOLVER</span><span class="o">.</span><span class="n">START_ITER</span> <span class="o">=</span> <span class="n">start_iter</span>
+    <span class="n">cfg</span><span class="o">.</span><span class="n">SOLVER</span><span class="o">.</span><span class="n">SCHEDULER</span><span class="o">.</span><span class="n">TOTAL_ITERS</span> <span class="o">=</span> <span class="n">max_iter</span>
+    <span class="k">if</span> <span class="n">cfg</span><span class="o">.</span><span class="n">SOLVER</span><span class="o">.</span><span class="n">SNAPSHOT_EPOCHS</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">cfg</span><span class="o">.</span><span class="n">SOLVER</span><span class="o">.</span><span class="n">SNAPSHOT_ITER</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">SOLVER</span><span class="o">.</span><span class="n">SNAPSHOT_EPOCHS</span> <span class="o">*</span> <span class="n">iter_per_epoch</span>
+    <span class="n">cfg</span><span class="o">.</span><span class="n">freeze</span><span class="p">()</span>
+
+    <span class="c1"># Create scheduler</span>
+    <span class="n">scheduler</span> <span class="o">=</span> <span class="n">LearningRateScheduler</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="n">cfg</span><span class="o">.</span><span class="n">SOLVER</span><span class="p">,</span> <span class="n">iter_per_epoch</span><span class="o">=</span><span class="n">iter_per_epoch</span><span class="p">)</span>
+    <span class="n">scheduler</span> <span class="o">=</span> <span class="n">checkpointer</span><span class="o">.</span><span class="n">load_scheduler</span><span class="p">(</span><span class="n">scheduler</span><span class="p">)</span>
+
+    <span class="c1"># Precise BN</span>
+    <span class="n">precise_bn_args</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">make_train_data_loader</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">start_iter</span><span class="o">=</span><span class="n">start_iter</span><span class="p">),</span> <span class="n">model</span><span class="p">,</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="n">cfg</span><span class="o">.</span><span class="n">MISC</span><span class="o">.</span><span class="n">DEVICE</span><span class="p">)</span>
+    <span class="p">]</span> <span class="k">if</span> <span class="n">cfg</span><span class="o">.</span><span class="n">TEST</span><span class="o">.</span><span class="n">PRECISE_BN</span><span class="o">.</span><span class="n">ENABLED</span> <span class="k">else</span> <span class="kc">None</span>
+
+    <span class="c1"># Model Distributed</span>
+    <span class="n">distributed</span> <span class="o">=</span> <span class="n">get_world_size</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">distributed</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">parallel</span><span class="o">.</span><span class="n">DistributedDataParallel</span><span class="p">(</span>
+            <span class="n">model</span><span class="p">,</span> <span class="n">device_ids</span><span class="o">=</span><span class="p">[</span><span class="n">args</span><span class="o">.</span><span class="n">local_rank</span><span class="p">],</span> <span class="n">output_device</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">local_rank</span><span class="p">,</span> <span class="n">find_unused_parameters</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Build hooks</span>
+    <span class="k">if</span> <span class="n">cfg</span><span class="o">.</span><span class="n">SOLVER</span><span class="o">.</span><span class="n">SCHEDULER</span><span class="o">.</span><span class="n">WARM_UP_EPOCHS</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">warmup_iter</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">SOLVER</span><span class="o">.</span><span class="n">SCHEDULER</span><span class="o">.</span><span class="n">WARM_UP_ITERS</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">warmup_iter</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">SOLVER</span><span class="o">.</span><span class="n">SCHEDULER</span><span class="o">.</span><span class="n">WARM_UP_EPOCHS</span> <span class="o">*</span> <span class="n">iter_per_epoch</span>
+    <span class="n">all_hooks</span> <span class="o">=</span> <span class="n">build_train_hooks</span><span class="p">(</span>
+        <span class="n">cfg</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">scheduler</span><span class="p">,</span> <span class="n">max_iter</span><span class="p">,</span> <span class="n">warmup_iter</span><span class="p">,</span> <span class="n">ignore_warmup_time</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">precise_bn_args</span><span class="o">=</span><span class="n">precise_bn_args</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Train</span>
+    <span class="n">train</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">train_loader</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">scheduler</span><span class="p">,</span> <span class="n">checkpointer</span><span class="p">,</span> <span class="n">all_hooks</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="id10">
+<h2>十、模型测试<a class="headerlink" href="#id10" title="永久链接至标题"></a></h2>
+<p>以<code class="docutils literal notranslate"><span class="pre">$Pet/cfgs/vision/ADE20K/pspnet/PSPNet_R-50c_1x.yaml</span></code>为例，模型测试过程中需要指定测试集，指定图像大小调整的参数等，这部分在yaml文件中有详细的配置。</p>
+<p>关于测试部分的详细配置解释参见<code class="docutils literal notranslate"><span class="pre">$Pet/lib/config/data.py</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">TEST</span><span class="p">:</span><span class="c1"># 测试参数设定</span>
+  <span class="n">DATASETS</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;ade2017_sceneparsing_val&quot;</span><span class="p">,)</span><span class="c1"># 指定测试集</span>
+  <span class="n">SIZE_DIVISIBILITY</span><span class="p">:</span> <span class="mi">8</span><span class="c1"># 指定每一个整理批次的分割数</span>
+  <span class="n">RESIZE</span><span class="p">:</span>
+    <span class="n">SCALE</span><span class="p">:</span> <span class="mi">512</span><span class="c1"># 测试期间图像大小调整的参数，是图像最短边的像素大小</span>
+</pre></div>
+</div>
+<p>关于模型测试的主要步骤包括创建模型、加载模型、创建测试数据集与加载器、构建测试引擎等。详细参见<code class="docutils literal notranslate"><span class="pre">$pet/tools/vision/test_net.py</span></code>。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load model</span>
+    <span class="n">test_weights</span> <span class="o">=</span> <span class="n">get_weights</span><span class="p">(</span><span class="n">cfg</span><span class="o">.</span><span class="n">MISC</span><span class="o">.</span><span class="n">CKPT</span><span class="p">,</span> <span class="n">cfg</span><span class="o">.</span><span class="n">TEST</span><span class="o">.</span><span class="n">WEIGHTS</span><span class="p">)</span>
+    <span class="n">load_weights</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">test_weights</span><span class="p">)</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="n">cfg</span><span class="o">.</span><span class="n">MISC</span><span class="o">.</span><span class="n">DEVICE</span><span class="p">))</span>
+
+    <span class="c1"># Create testing dataset and loader</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">build_dataset</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">is_train</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">test_loader</span> <span class="o">=</span> <span class="n">make_test_data_loader</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">dataset</span><span class="p">)</span>
+
+    <span class="c1"># Build hooks</span>
+    <span class="n">all_hooks</span> <span class="o">=</span> <span class="n">build_test_hooks</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">cfg_file</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">log_period</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">num_warmup</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># Build test engine</span>
+    <span class="n">test_engine</span> <span class="o">=</span> <span class="n">TestEngine</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">dataset</span><span class="p">)</span>
+
+    <span class="c1"># Test</span>
+    <span class="n">test</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">test_engine</span><span class="p">,</span> <span class="n">test_loader</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">all_hooks</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="id11">
+<h2>十一、可视化与指标<a class="headerlink" href="#id11" title="永久链接至标题"></a></h2>
+<p>以<code class="docutils literal notranslate"><span class="pre">$Pet/cfgs/vision/ADE20K/pspnet/PSPNet_R-50c_1x.yaml</span></code>为例，模型的评估需要存储测试记录，设定评估参数，这部分在yaml文件中有详细的配置。</p>
+<p>关于评估部分的详细配置解释参见<code class="docutils literal notranslate"><span class="pre">$Pet/lib/config/config.py</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">EVAL</span><span class="p">:</span><span class="c1"># 验证</span>
+  <span class="n">RECORD</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="s2">&quot;20210512&quot;</span><span class="p">,</span> <span class="s2">&quot;recorder&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;0.6c&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;semseg&quot;</span><span class="p">:</span> <span class="s2">&quot;mIoU/MeanACC/PixelACC/MeanF1Score:41.91/52.37/80.17/55.83&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mark&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">},</span>
+           <span class="p">{</span><span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="s2">&quot;20210516&quot;</span><span class="p">,</span> <span class="s2">&quot;recorder&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;0.7a&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;semseg&quot;</span><span class="p">:</span> <span class="s2">&quot;mIoU/MeanACC/PixelACC/MeanF1Score:42.26/52.61/80.05/56.08&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mark&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">},</span>
+           <span class="p">{</span><span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="s2">&quot;20210617&quot;</span><span class="p">,</span> <span class="s2">&quot;recorder&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;0.7a&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;semseg&quot;</span><span class="p">:</span> <span class="s2">&quot;mIoU/MeanACC/PixelACC/MeanF1Score:41.91/52.06/79.90/55.75&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mark&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">}]</span><span class="c1"># 测试记录存储，&quot;time&quot;:测试时间；&quot;recorder&quot;:测试者；&quot;version&quot;:所用版本；&quot;semseg&quot;: &quot;mIoU/MeanACC/PixelACC/MeanF1Score:41.91/52.37/80.17/55.83&quot;:评估参数</span>
+</pre></div>
+</div>
+</section>
+<section id="id12">
+<h2>参考文献<a class="headerlink" href="#id12" title="永久链接至标题"></a></h2>
+<p>[1] He, Kaiming, et al. “Deep residual learning for image recognition.” <em>Proceedings of the IEEE conference on computer vision and pattern recognition</em>. 2016.</p>
+<p>[2] Zhao, Hengshuang, et al. “Pyramid scene parsing network.” <em>Proceedings of the IEEE conference on computer vision and pattern recognition</em>. 2017.</p>
+<p>[3] Zhou, Bolei, et al. “Scene parsing through ade20k dataset.” <em>Proceedings of the IEEE conference on computer vision and pattern recognition</em>. 2017.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2018-2021, BUPT_PRIV.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
