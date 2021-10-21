@@ -287,7 +287,7 @@ scheduler = checkpointer.load_scheduler(scheduler)
 
 (1) 数据集下载
 
-详见前面**<u>数据准备</u>**部分。
+详见前面**数据准备**部分。
 
 (2) 预训练模型权重/测试模型权重文件可以下载
 
