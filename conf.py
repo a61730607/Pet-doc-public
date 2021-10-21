@@ -74,7 +74,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'sphinx_rtd_theme'
+# html_theme = 'sphinx_rtd_theme'
 html_theme = 'pytorch_sphinx_theme'
 html_theme_path = [pytorch_sphinx_theme.get_html_theme_path()]
 
@@ -82,13 +82,48 @@ html_theme_options = {
     'menu': [
         {
             'name': 'GitHub',
-            'url': 'https://github.com/BUPT-PRIV/Pet-dev'
+            'url': 'https://github.com/open-mmlab/mmcv'
         },
         {
             'name':
             'Projects',
             'children': [
-
+                {
+                    'name': 'MMAction2',
+                    'url': 'https://github.com/open-mmlab/mmaction2',
+                },
+                {
+                    'name': 'MMClassification',
+                    'url': 'https://github.com/open-mmlab/mmclassification',
+                },
+                {
+                    'name': 'MMDetection',
+                    'url': 'https://github.com/open-mmlab/mmdetection',
+                },
+                {
+                    'name': 'MMDetection3D',
+                    'url': 'https://github.com/open-mmlab/mmdetection3d',
+                },
+                {
+                    'name': 'MMEditing',
+                    'url': 'https://github.com/open-mmlab/mmediting',
+                },
+                {
+                    'name': 'MMGeneration',
+                    'url': 'https://github.com/open-mmlab/mmgeneration',
+                },
+                {
+                    'name': 'MMOCR',
+                    'url': 'https://github.com/open-mmlab/mmocr',
+                },
+                {
+                    'name': 'MMPose',
+                    'url': 'https://github.com/open-mmlab/mmpose',
+                },
+                {
+                    'name': 'MMSegmentation',
+                    'url': 'https://github.com/open-mmlab/mmsegmentation',
+                },
                 {
                     'name': 'MMTracking',
                     'url': 'https://github.com/open-mmlab/mmtracking',
@@ -100,6 +135,18 @@ html_theme_options = {
             'OpenMMLab',
             'children': [
                 {
+                    'name': 'Homepage',
+                    'url': 'https://openmmlab.com/'
+                },
+                {
+                    'name': 'GitHub',
+                    'url': 'https://github.com/open-mmlab/'
+                },
+                {
+                    'name': 'Twitter',
+                    'url': 'https://twitter.com/OpenMMLab'
+                },
+                {
                     'name': 'Zhihu',
                     'url': 'https://zhihu.com/people/openmmlab'
                 },
@@ -107,12 +154,17 @@ html_theme_options = {
         },
     ]
 }
+
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+html_css_files = ['css/readthedocs.css']
 
-language = 'zh_CN'
+# -- Extension configuration -------------------------------------------------
+# Ignore >>> when copying code
+copybutton_prompt_text = r'>>> |\.\.\. '
+copybutton_prompt_is_regexp = True
 
 
 def builder_inited_handler(app):
