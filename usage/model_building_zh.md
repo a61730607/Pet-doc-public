@@ -13,7 +13,7 @@ Pet中视觉模型分为四个部分：
 
 Pet中的模型是逐级构建的，在视觉任务中，最上层是完整的模型类`GeneralizedCNN` 。该类组合并实例化了模型的所有部分，并且在前向函数中控制数据流。构建及前向过程如图所示（以ResNet+FCOS为例）：
 
-<p align="center"><img width="60%" src="../img_sources/330-430.png" /></p>
+![image](../image_source/330-430.png)
 
 
 

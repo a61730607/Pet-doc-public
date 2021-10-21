@@ -343,7 +343,7 @@ TEST:
 
 在Pet中Faster R-CNN返回每一个目标的类别、置信度分数和边界框坐标。将MSCOCO2017_val中的一张图片的推理结果进行可视化如下图。
 
-<img src="./test.png" width="60%">
+![image](../../image_source/test.png)
 
 
 ### 参考文献
