@@ -16,7 +16,7 @@ Pet提供了两种训练模型的方法:
 ### 启动训练
 
 使用`tools/train_net_all.py`训练模型时，可通过命令行参数指定具体的训练环境及配置文件等。具体有以下四个可选参数，一般情况下，常用的只有前两项甚至仅用第一项：
-* **--cfg**：可指定一个YAML文件，该文件里包含了所有训练时使用到的可以调节的超参数；注意，此处YAML的放置路径必须遵循[1.5.1 configs]()中的标准，否则将会影响后续的训练脚本路径定位。默认项：`cfgs/vision/mscoco/e2e_faster_rcnn_R-50-FPN_1x.yaml`。
+* **--cfg**：可指定一个YAML文件，该文件里包含了所有训练时使用到的可以调节的超参数；注意，此处YAML的放置路径必须遵循[配置系统](./configs_zh.md)中的标准，否则将会影响后续的训练脚本路径定位。默认项：`cfgs/vision/mscoco/e2e_faster_rcnn_R-50-FPN_1x.yaml`。
 * **--gpu_id**：根据具体的运行环境,指定用于训练的GPU。默认项：`"0,1,2,3,4,5,6,7"`(8卡训练)。
 * **--type**：训练类型，与`tools/{type}/[project/subtask]/train_net.py`中的`type`对应，用于进一步确定训练脚本路径，可选`vision`、`projects`、`tasks`。默认项：`None`，通常不需指定，可通过`--cfg`参数确定。
 * **training_script_args**：剩余的不属于任何训练类型的训练项目脚本。
@@ -188,7 +188,7 @@ all_hooks = build_train_hooks(
     cfg, optimizer, scheduler, max_iter, warmup_iter, ignore_warmup_time=False, precise_bn_args=precise_bn_args
 )
 ```
-钩子(HOOK)类的具体介绍请看[1.5.4 HOOK]()
+钩子(HOOK)类的具体介绍请看[Hook](./hook_zh.md)
 
 **(10) 开启训练流**
 ```python
@@ -198,7 +198,7 @@ train(cfg, model, train_loader, optimizer, scheduler, checkpointer, all_hooks)
 
 * train函数
 
-Pet的训练工作流与基于pytorch的训练工作流类似，只是将部分默认操作和用户自定义操作借助HOOK机制加以实现，当train函数运行到预定义的位点时候就会调用对应Hook中的方法([1.5.4 HOOK]())。因此该部分不展开具体介绍，仅以代码注释加以讲解。
+Pet的训练工作流与基于pytorch的训练工作流类似，只是将部分默认操作和用户自定义操作借助HOOK机制加以实现，当train函数运行到预定义的位点时候就会调用对应Hook中的方法([Hook](./hook_zh.md))。因此该部分不展开具体介绍，仅以代码注释加以讲解。
 
 ```python
 def train(cfg, model, loader, optimizer, scheduler, checkpointer, all_hooks):

@@ -1,5 +1,5 @@
 欢迎来到Pet ,使用Pet 开始你的深度学习之路。
-=======================================
+========================================================
 
 .. toctree::
    :maxdepth: 2
@@ -33,10 +33,10 @@
 
    switch_language.md
 
-.. toctree::
-   :caption: 接口文档（英文）
-
-   # api.rst
+#.. toctree::
+#   :caption: 接口文档（英文）
+#
+#   api.rst
 
 
 Indices and tables

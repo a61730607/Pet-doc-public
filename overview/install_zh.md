@@ -2,7 +2,7 @@
 
 本文档包含了Pet及其依赖的安装（包括Pytorch）。
 
-- Pet的介绍请参阅 [`README`](README_zh.md)。
+- Pet的介绍请参阅 [`README`](https://github.com/BUPT-PRIV/Pet-dev/blob/main/README.md)。
 
 **环境要求:**
 

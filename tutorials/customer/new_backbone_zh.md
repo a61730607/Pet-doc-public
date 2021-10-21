@@ -2,7 +2,7 @@
 
 Pet支持自定义新的模块与算法，请遵循Pet对应模块的规范。
 
-Pet的模型构建过程请参考 [模型构建](../tutorials/model_building_zh.md)。本篇示例教程以添加一个骨干网络为例。
+Pet的模型构建过程请参考 [模型构建](../../usage/model_building_zh.md)。本篇示例教程以添加一个骨干网络为例。
 
 ## 添加新的骨干网络
 
@@ -86,7 +86,7 @@ MODEL.EXAMPLENET.LINEAR_ACT = 'ReLU6' # 线性层激活函数
 MODEL.EXAMPLENET.FC_FEATURES = [512, 32] # 线性层隐层维度
 ```
 
-在使用时，可以方便地通过修改配置文件来调整模型结构。修改方式可参考[配置系统](../tutorials/configs_zh.md)。
+在使用时，可以方便地通过修改配置文件来调整模型结构。修改方式可参考[配置系统](../../usage/configs_zh.md)。
 
 ## 代码
 
