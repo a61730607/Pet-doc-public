@@ -18,7 +18,10 @@
    usage/hook_zh.md
    usage/data_zh.md
    usage/solver_zh.md
+   usage/logger_zh.md
+
    usage/model_building_zh.md
+   usage/checkpointer_zh.md
    usage/training_zh.md
    usage/evaluation_zh.md
 
