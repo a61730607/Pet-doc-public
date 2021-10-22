@@ -33,10 +33,10 @@
 
    switch_language.md
 
-#.. toctree::
-#   :caption: 接口文档（英文）
-#
-#   api.rst
+.. toctree::
+   :caption: 接口文档（英文）
+
+   api.rst
 
 
 Indices and tables

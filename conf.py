@@ -14,7 +14,7 @@ import os
 import subprocess
 import sys
 import pytorch_sphinx_theme
-sys.path.insert(0, os.path.abspath('..'))
+sys.path.insert(0, os.path.abspath('.'))
 
 # -- Project information -----------------------------------------------------
 
@@ -74,92 +74,95 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-# html_theme = 'sphinx_rtd_theme'
-html_theme = 'pytorch_sphinx_theme'
+html_theme = 'sphinx_rtd_theme'
+html_theme = 'sphinx_book_theme'
+# html_theme = 'pytorch_sphinx_theme'
 html_theme_path = [pytorch_sphinx_theme.get_html_theme_path()]
 
-html_theme_options = {
-    'menu': [
-        {
-            'name': 'GitHub',
-            'url': 'https://github.com/open-mmlab/mmcv'
-        },
-        {
-            'name':
-            'Projects',
-            'children': [
-                {
-                    'name': 'MMAction2',
-                    'url': 'https://github.com/open-mmlab/mmaction2',
-                },
-                {
-                    'name': 'MMClassification',
-                    'url': 'https://github.com/open-mmlab/mmclassification',
-                },
-                {
-                    'name': 'MMDetection',
-                    'url': 'https://github.com/open-mmlab/mmdetection',
-                },
-                {
-                    'name': 'MMDetection3D',
-                    'url': 'https://github.com/open-mmlab/mmdetection3d',
-                },
-                {
-                    'name': 'MMEditing',
-                    'url': 'https://github.com/open-mmlab/mmediting',
-                },
-                {
-                    'name': 'MMGeneration',
-                    'url': 'https://github.com/open-mmlab/mmgeneration',
-                },
-                {
-                    'name': 'MMOCR',
-                    'url': 'https://github.com/open-mmlab/mmocr',
-                },
-                {
-                    'name': 'MMPose',
-                    'url': 'https://github.com/open-mmlab/mmpose',
-                },
-                {
-                    'name': 'MMSegmentation',
-                    'url': 'https://github.com/open-mmlab/mmsegmentation',
-                },
-                {
-                    'name': 'MMTracking',
-                    'url': 'https://github.com/open-mmlab/mmtracking',
-                },
-            ]
-        },
-        {
-            'name':
-            'OpenMMLab',
-            'children': [
-                {
-                    'name': 'Homepage',
-                    'url': 'https://openmmlab.com/'
-                },
-                {
-                    'name': 'GitHub',
-                    'url': 'https://github.com/open-mmlab/'
-                },
-                {
-                    'name': 'Twitter',
-                    'url': 'https://twitter.com/OpenMMLab'
-                },
-                {
-                    'name': 'Zhihu',
-                    'url': 'https://zhihu.com/people/openmmlab'
-                },
-            ]
-        },
-    ]
-}
+# html_theme_options = {
+#     'menu': [
+#         {
+#             'name': 'GitHub',
+#             'url': 'https://github.com/open-mmlab/mmcv'
+#         },
+#         {
+#             'name':
+#             'Projects',
+#             'children': [
+#                 {
+#                     'name': 'MMAction2',
+#                     'url': 'https://github.com/open-mmlab/mmaction2',
+#                 },
+#                 {
+#                     'name': 'MMClassification',
+#                     'url': 'https://github.com/open-mmlab/mmclassification',
+#                 },
+#                 {
+#                     'name': 'MMDetection',
+#                     'url': 'https://github.com/open-mmlab/mmdetection',
+#                 },
+#                 {
+#                     'name': 'MMDetection3D',
+#                     'url': 'https://github.com/open-mmlab/mmdetection3d',
+#                 },
+#                 {
+#                     'name': 'MMEditing',
+#                     'url': 'https://github.com/open-mmlab/mmediting',
+#                 },
+#                 {
+#                     'name': 'MMGeneration',
+#                     'url': 'https://github.com/open-mmlab/mmgeneration',
+#                 },
+#                 {
+#                     'name': 'MMOCR',
+#                     'url': 'https://github.com/open-mmlab/mmocr',
+#                 },
+#                 {
+#                     'name': 'MMPose',
+#                     'url': 'https://github.com/open-mmlab/mmpose',
+#                 },
+#                 {
+#                     'name': 'MMSegmentation',
+#                     'url': 'https://github.com/open-mmlab/mmsegmentation',
+#                 },
+#                 {
+#                     'name': 'MMTracking',
+#                     'url': 'https://github.com/open-mmlab/mmtracking',
+#                 },
+#             ]
+#         },
+#         {
+#             'name':
+#             'OpenMMLab',
+#             'children': [
+#                 {
+#                     'name': 'Homepage',
+#                     'url': 'https://openmmlab.com/'
+#                 },
+#                 {
+#                     'name': 'GitHub',
+#                     'url': 'https://github.com/open-mmlab/'
+#                 },
+#                 {
+#                     'name': 'Twitter',
+#                     'url': 'https://twitter.com/OpenMMLab'
+#                 },
+#                 {
+#                     'name': 'Zhihu',
+#                     'url': 'https://zhihu.com/people/openmmlab'
+#                 },
+#             ]
+#         },
+#     ]
+# }
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
-html_css_files = ['css/readthedocs.css']
+#html_logo = "../sphinx_copybutton/_static/copy-button.svg"
+html_title = "Sphinx Copybutton"
+html_css_files = ['./_static/css/readthedocs.css']
 
 # -- Extension configuration -------------------------------------------------
 # Ignore >>> when copying code
