@@ -4,28 +4,4 @@ recommonmark
 sphinx_markdown_tables
 pytorch_sphinx_theme
 sphinx_book_theme
-dpath
-einops  # for cswin
-fvcore  # for onenet
-h5py
-lvis  # for lvis
-matplotlib>=3.0.0
-ninja  # for build
-numpy>=1.18.2  # lvis>=0.5.3 requires numpy>=1.18.2
-opencv-python>=3.4.0
-parse
-Pillow
-pycocotools
-pytest
-ruamel.yaml
-scikit-learn
-scipy>=1.2.0
-setuptools
-six
-tabulate
-tensorboard
-termcolor
-torch>=1.6.0
-torchvision>=0.7.0
-tqdm
-yacs>=0.1.8  # add a support display for NoneType
+

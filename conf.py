@@ -161,7 +161,7 @@ html_theme_path = [pytorch_sphinx_theme.get_html_theme_path()]
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 #html_logo = "../sphinx_copybutton/_static/copy-button.svg"
-html_title = "Sphinx Copybutton"
+# html_title = "Sphinx Copybutton"
 html_css_files = ['./_static/css/readthedocs.css']
 
 # -- Extension configuration -------------------------------------------------
